@@ -1,6 +1,6 @@
 version = 1
 
-test_patterns = ["src/**"]
+test_patterns = ["src/main/java/com/destructor/destructor2lit"]
 
 [[analyzers]]
 name = "java"
