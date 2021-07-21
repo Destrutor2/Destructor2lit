@@ -1,0 +1,25 @@
+main: com.destructor.destructor2lit.Main
+name: Destructor2lit
+version: Alpha
+author: Destructor2ku
+description: Plugin Bedwars par Destructor2ku
+prefix: "[Destructor2lit]"
+commands:
+  leave:
+    aliases: [l, hub]
+  bedwars:
+    description: Commande principale du plugin
+    aliases: [bw, Bedwars]
+  toggleparticules:
+    description: Activer/Désactiver les particules
+    aliases: [togpar,toggleparticule]
+    usage: /toggleparticules
+    permission: destructor2lit.command.toggleparticules
+
+depend:
+  - HolographicDisplays
+  - ProtocolLib
+
+permissions:
+  destructor2lit.command.toggleparticules:
+    description: Permission d'activer/désactiver les particules

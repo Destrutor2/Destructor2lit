@@ -1,0 +1,175 @@
+#Fichier de configuration Destructor2lit
+
+#[NON IMPLEMENTÉ] Nombres de parties Bedwars qui peuvent se faire en parralel sur ce même serveur
+instances: 1
+
+#Parametres de fireball, et de fireball jump
+Fireballs:
+  knockbackradius: 5.5
+  knockbackmodifier: 1.2
+  explosionheightmodifier: -2.0
+  explosionpower: 2.0
+  #Radius doit etre entier!
+  fireradius: 4
+  #probabilite en %
+  fireprob: 6.0
+  #ne pas mettre des valeurs trop grandes, ca commence a laguer visuellement avec des speed>1
+  speed: 1
+
+Fireballjump:
+  knockbackradius: 5.5
+  knockbackmodifier: 0.9
+  explosionheightmodifier: -2.0
+  throwermultiplier: 2.0
+  velocitymodifier: 8
+
+#Hauteur du void
+voidheight: 30
+#Degat que font les golems
+golemdamagemultiplier: 0.7
+golemhealthmultiplier: 1
+golemspeedmultiplier: 1.2
+#Limites de build
+buildlimit: 80
+builddownlimit: 60
+#Temps en milisecondes que le tag du last damager reste
+attacktagstaytime: 30000
+minbowcharge: 0.3
+mainspawn:
+  x: 0.5
+  y: 120
+  z: 0.5
+
+Generators:
+# Ces delays sont en ticks
+# faire en sorte que les delays soient des multiples de 5, 5*1.5 et 5*2 (par rapport aux upgrades)
+  maxgolddelay : 500
+  mingolddelay : 60
+  maxirondelay : 40
+  tickstotry: 5
+
+#Spawns des teams (modifiable avec /bedwars setspawn [couleur])
+Spawns:
+  red:
+    x: 0
+    y: 101
+    z: 0
+    yaw: 0
+  blue:
+    x: 0
+    y: 101
+    z: 0
+    yaw: 0
+  green:
+    x: 0
+    y: 101
+    z: 0
+    yaw: 0
+  yellow:
+    x: 0
+    y: 101
+    z: 0
+    yaw: 0
+  aqua:
+    x: 0
+    y: 101
+    z: 0
+    yaw: 0
+  white:
+    x: 0
+    y: 101
+    z: 0
+    yaw: 0
+  pink:
+    x: 0
+    y: 101
+    z: 0
+    yaw: 0
+  gray:
+    x: 0
+    y: 101
+    z: 0
+    yaw: 0
+
+Beds:
+  red:
+    block1:
+      x: 0
+      y: 0
+      z: 0
+    block2:
+      x: 0
+      y: 0
+      z: 0
+  blue:
+    block1:
+      x: 0
+      y: 0
+      z: 0
+    block2:
+      x: 0
+      y: 0
+      z: 0
+  green:
+    block1:
+      x: 0
+      y: 0
+      z: 0
+    block2:
+      x: 0
+      y: 0
+      z: 0
+  yellow:
+    block1:
+      x: 0
+      y: 0
+      z: 0
+    block2:
+      x: 0
+      y: 0
+      z: 0
+  aqua:
+    block1:
+      x: 0
+      y: 0
+      z: 0
+    block2:
+      x: 0
+      y: 0
+      z: 0
+  white:
+    block1:
+      x: 0
+      y: 0
+      z: 0
+    block2:
+      x: 0
+      y: 0
+      z: 0
+  pink:
+    block1:
+      x: 0
+      y: 0
+      z: 0
+    block2:
+      x: 0
+      y: 0
+      z: 0
+  gray:
+    block1:
+      x: 0
+      y: 0
+      z: 0
+    block2:
+      x: 0
+      y: 0
+      z: 0
+
+Gen:
+
+npcs:
+
+
+#Version de la config, ne pas toucher
+configversion: 1
+
