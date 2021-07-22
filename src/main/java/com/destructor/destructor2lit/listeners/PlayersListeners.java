@@ -729,17 +729,19 @@ public class PlayersListeners implements Listener {
 	public void onEggThrow(ProjectileLaunchEvent e) {
 		if (e.getEntity() instanceof Egg && e.getEntity().getShooter() instanceof Player) {
 			Player player = (Player) e.getEntity().getShooter();
-			if (player.getItemInHand().getItemMeta().hasDisplayName()) {
-				if (player.getItemInHand().getItemMeta().getDisplayName().equalsIgnoreCase("bridge egg")) {
+//			if (player.getItemInHand().getItemMeta().hasDisplayName()) {
+//				if (player.getItemInHand().getItemMeta().getDisplayName().equalsIgnoreCase("bridge egg")) {
 					if (utils.getMetadata(player, "lastfb").asLong() < (new SystemClock().currentTimeMillis() - 500)) {
-						new bridgeEgg(new Utils().getMetadata(player, "color").asString(), (Egg) e.getEntity(), main, 3);
+						new bridgeEgg(new Utils().getMetadata(player, "color").asString(), (Egg) e.getEntity(), main, 2);
+						utils.setMetadata((Player) e.getEntity().getShooter(), "lastfb", new SystemClock().currentTimeMillis());
 					} else {
 						player.sendMessage(ChatColor.RED + "Please wait 0.5s to use that again");
+						e.setCancelled(true);
 						player.getItemInHand().setAmount(player.getItemInHand().getAmount() + 1);
-						e.getEntity().remove();
+//						e.getEntity().remove();
 					}
-				}
-			}
+//				}
+//			}
 		}
 	}
 

@@ -21,27 +21,6 @@
     <finalName>Destructor2lit</finalName>
     <plugins>
       <plugin>
-        <groupId>com.appland</groupId>
-        <artifactId>appmap-maven-plugin</artifactId>
-        <version>1.1.2</version>
-        <executions>
-          <execution>
-            <phase>process-classes</phase>
-            <goals>
-              <goal>prepare-agent</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <version>2.13</version>
-        <configuration>
-          <reuseForks>true</reuseForks>
-          <argLine>@{argLine} --illegal-access=permit</argLine>
-        </configuration>
-      </plugin>
-      <plugin>
         <artifactId>maven-jar-plugin</artifactId>
         <version>2.3.1</version>
         <configuration>
