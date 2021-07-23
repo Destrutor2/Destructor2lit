@@ -1,7 +1,9 @@
 package com.destructor.destructor2lit.listeners;
 
+import com.comphenix.protocol.events.PacketContainer;
 import com.destructor.destructor2lit.*;
 import com.destructor.destructor2lit.customEntities.BwPet;
+import com.destructor.destructor2lit.customItems.PopupTower;
 import com.destructor.destructor2lit.customItems.bridgeEgg;
 import com.destructor.destructor2lit.customItems.bwFireball;
 import com.destructor.destructor2lit.customItems.bwSponge;
@@ -13,8 +15,10 @@ import com.destructor.destructor2lit.guis.Shop;
 import com.destructor.destructor2lit.timers.GamePhaseTimer;
 import com.destructor.destructor2lit.timers.WaitingScoreboardTimer;
 import com.destructor.destructor2lit.utils.Utils;
+import de.slikey.effectlib.particle.ReflectionHandler;
 import net.minecraft.server.v1_8_R3.*;
 import org.apache.logging.log4j.core.helpers.SystemClock;
+import org.bukkit.Achievement;
 import org.bukkit.Material;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -23,6 +27,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -62,6 +67,7 @@ public class PlayersListeners implements Listener {
 	public void onJoin(PlayerJoinEvent e) {
 		Player player = e.getPlayer();
 		main.npcManager.showNpcs(main, player);
+		player.awardAchievement(Achievement.OPEN_INVENTORY);
 //		main.entityHider.hideHiddenEntities(player);
 
 //		new PacketReader().inject(player, main);
@@ -268,6 +274,10 @@ public class PlayersListeners implements Listener {
 
 		if (block.getType().equals(Material.SPONGE)) {
 			new bwSponge(main, block);
+		}
+
+		if(block.getType().equals(Material.CHEST)){
+			new PopupTower(main, block);
 		}
 
 		setPlacedBlock(block);

@@ -23,6 +23,10 @@ import java.util.Arrays;
 public class Shop {
 
     public static void openShopUi(Player player, int page) {
+        if(!player.getOpenInventory().getTitle().equalsIgnoreCase("container.crafting")&&page==0){
+            Bukkit.broadcastMessage(ChatColor.RED+"Please report this to Destructor, issue with "+player.getDisplayName()+"\n topinv: "+player.getOpenInventory().getTopInventory().toString()+" title: "+player.getOpenInventory().getTitle()+" bottom inv: "+player.getOpenInventory().getBottomInventory().toString());
+            return;
+        }
 //        On cree 8 pages pour le shop
         Inventory[] pages = {
                 Bukkit.createInventory(null, 54, "Quick Buy"),

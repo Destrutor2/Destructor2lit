@@ -83,8 +83,8 @@ import java.util.concurrent.ConcurrentMap;
 -https://www.spigotmc.org/resources/randomkb.48891/
 * */
 
-/*
-18:11:39 ERROR]: Could not pass event NpcClickEvent to Destructor2lit vAlpha
+
+/*18:11:39 ERROR]: Could not pass event NpcClickEvent to Destructor2lit vAlpha
 org.bukkit.event.EventException
 	at org.bukkit.plugin.java.JavaPluginLoader$1.execute(JavaPluginLoader.java:310) ~[spigot.jar:git-Spigot-db6de12-18fbb24]
 	at org.bukkit.plugin.RegisteredListener.callEvent(RegisteredListener.java:62) ~[spigot.jar:git-Spigot-db6de12-18fbb24]
@@ -119,8 +119,8 @@ org.bukkit.event.EventException
 	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:354) [spigot.jar:git-Spigot-db6de12-18fbb24]
 	at io.netty.util.concurrent.SingleThreadEventExecutor$2.run(SingleThreadEventExecutor.java:116) [spigot.jar:git-Spigot-db6de12-18fbb24]
 	at java.base/java.lang.Thread.run(Thread.java:831) [?:?]
-Caused by: net.minecraft.server.v1_8_R3.CancelledPacketHandleException
-*/
+Caused by: net.minecraft.server.v1_8_R3.CancelledPacketHandleException*/
+
 
 
 public class Main extends JavaPlugin {
@@ -195,6 +195,7 @@ public class Main extends JavaPlugin {
 			this.setEnabled(false);
 			return;
 		}
+
 		npcManager = new NPCManager();
 		protocolManager = ProtocolLibrary.getProtocolManager();
 		Main main = this;
@@ -240,7 +241,6 @@ public class Main extends JavaPlugin {
 				}
 			}
 		});
-
 
 //		On affiche pas les armor stands serverOnly pour ca on utilise du code vole lol
 //		entityHider = new EntityHider(this, EntityHider.Policy.BLACKLIST);
@@ -379,6 +379,9 @@ public class Main extends JavaPlugin {
 			var6.printStackTrace();
 		}
 
+		if(npcManager!=null) {
+			npcManager.removeAllNpcs(this);
+		}
 
 		for (Hologram holo : HologramsAPI.getHolograms(this)) {
 			holo.delete();
