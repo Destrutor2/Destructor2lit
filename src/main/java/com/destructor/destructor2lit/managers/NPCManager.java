@@ -1,7 +1,15 @@
 package com.destructor.destructor2lit.managers;
 
+import com.comphenix.protocol.PacketType;
+import com.comphenix.protocol.events.PacketContainer;
+import com.comphenix.protocol.wrappers.EnumWrappers;
+import com.comphenix.protocol.wrappers.PlayerInfoData;
+import com.comphenix.protocol.wrappers.WrappedChatComponent;
+import com.comphenix.protocol.wrappers.WrappedGameProfile;
 import com.destructor.destructor2lit.Main;
+import com.destructor.destructor2lit.utils.packetWrappers.WrapperPlayServerPlayerInfo;
 import com.mojang.authlib.GameProfile;
+import de.slikey.effectlib.particle.ReflectionHandler;
 import net.minecraft.server.v1_8_R3.*;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -12,6 +20,7 @@ import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_8_R3.scoreboard.CraftScoreboard;
 import org.bukkit.entity.Player;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -51,10 +60,10 @@ public class NPCManager {
 
 			if (args[1].equalsIgnoreCase("shop")) {
 				main.getConfig().set("npcs." + gameProfile.getId() + ".type", "shop");
-				player.sendMessage(ChatColor.GREEN + "Le npc " + ChatColor.WHITE + gameProfile.getId().toString() + ChatColor.GREEN + " a été créé avec le type "+ChatColor.WHITE+"shop");
+				player.sendMessage(ChatColor.GREEN + "Le npc " + ChatColor.WHITE + gameProfile.getId().toString() + ChatColor.GREEN + " a été créé avec le type " + ChatColor.WHITE + "shop");
 			} else if (args[1].equalsIgnoreCase("upgrade")) {
 				main.getConfig().set("npcs." + gameProfile.getId() + ".type", "upgrade");
-				player.sendMessage(ChatColor.GREEN + "Le npc " + ChatColor.WHITE + gameProfile.getId().toString() + ChatColor.GREEN + " a été créé avec le type "+ChatColor.WHITE+"upgrade");
+				player.sendMessage(ChatColor.GREEN + "Le npc " + ChatColor.WHITE + gameProfile.getId().toString() + ChatColor.GREEN + " a été créé avec le type " + ChatColor.WHITE + "upgrade");
 
 			} else {
 				player.sendMessage(ChatColor.RED + "Le deuxième argument doit être shop ou upgrade!");
@@ -62,7 +71,7 @@ public class NPCManager {
 			}
 		} else if (args.length == 1) {
 			main.getConfig().set("npcs." + gameProfile.getId() + ".type", "null");
-			player.sendMessage(ChatColor.GREEN + "Le npc " + ChatColor.WHITE + gameProfile.getId().toString() + ChatColor.GREEN + " a été créé avec le type "+ChatColor.RED+"null");
+			player.sendMessage(ChatColor.GREEN + "Le npc " + ChatColor.WHITE + gameProfile.getId().toString() + ChatColor.GREEN + " a été créé avec le type " + ChatColor.RED + "null");
 		} else {
 			player.sendMessage(ChatColor.RED + "Nombre d'argument incorrect!");
 			return;
@@ -85,9 +94,9 @@ public class NPCManager {
 						main.getConfig().getDouble("npcs." + npcUUID + ".z"),
 						(float) main.getConfig().getDouble("npcs." + npcUUID + ".yaw"),
 						(float) main.getConfig().getDouble("npcs." + npcUUID + ".pitch"));
-				Player npcPlayer = npc.getBukkitEntity().getPlayer();
-				npcPlayer.setPlayerListName("");
-				npcPlayer.setGameMode(GameMode.CREATIVE);
+//				Player npcPlayer = npc.getBukkitEntity().getPlayer();
+//				npcPlayer.setPlayerListName("");
+//				npcPlayer.setGameMode(GameMode.CREATIVE);
 				if (!npcs.contains(npc)) {
 					npcs.add(npc);
 				}
@@ -166,6 +175,27 @@ public class NPCManager {
 		PlayerConnection connection = ((CraftPlayer) player).getHandle().playerConnection;
 		connection.sendPacket(new PacketPlayOutNamedEntitySpawn(npc));
 
+	}
+
+	public void removeAllNpcs(Main main) {
+		for (EntityPlayer npc : npcs) {
+			PacketContainer packet = main.protocolManager.createPacket(PacketType.Play.Server.PLAYER_INFO);
+			packet.getPlayerInfoAction().write(0, EnumWrappers.PlayerInfoAction.REMOVE_PLAYER);
+			List<PlayerInfoData> dataList = new ArrayList<>();
+			dataList.add(new PlayerInfoData(new WrappedGameProfile(npc.getUniqueID(),npc.getName()),1, EnumWrappers.NativeGameMode.CREATIVE, WrappedChatComponent.fromText(npc.getName())));
+			packet.getPlayerInfoDataLists().write(0,dataList);
+			main.protocolManager.broadcastServerPacket(packet);
+			packet = main.protocolManager.createPacket(PacketType.Play.Server.ENTITY_DESTROY);
+			packet.getIntegerArrays().write(0,new int[]{npc.getId()});
+			main.protocolManager.broadcastServerPacket(packet);
+//			for (Player player : Bukkit.getOnlinePlayers()) {
+//				try {
+//					main.protocolManager.sendServerPacket(player, packet);
+//				} catch (InvocationTargetException e) {
+//					e.printStackTrace();
+//				}
+//			}
+		}
 	}
 
 

@@ -84,6 +84,45 @@ import java.util.concurrent.ConcurrentMap;
 * */
 
 
+/*18:11:39 ERROR]: Could not pass event NpcClickEvent to Destructor2lit vAlpha
+org.bukkit.event.EventException
+	at org.bukkit.plugin.java.JavaPluginLoader$1.execute(JavaPluginLoader.java:310) ~[spigot.jar:git-Spigot-db6de12-18fbb24]
+	at org.bukkit.plugin.RegisteredListener.callEvent(RegisteredListener.java:62) ~[spigot.jar:git-Spigot-db6de12-18fbb24]
+	at org.bukkit.plugin.SimplePluginManager.fireEvent(SimplePluginManager.java:502) [spigot.jar:git-Spigot-db6de12-18fbb24]
+	at org.bukkit.plugin.SimplePluginManager.callEvent(SimplePluginManager.java:487) [spigot.jar:git-Spigot-db6de12-18fbb24]
+	at com.destructor.destructor2lit.Main$1.onPacketReceiving(Main.java:172) [Destructor2lit.jar:?]
+	at com.comphenix.protocol.injector.SortedPacketListenerList.invokeReceivingListener(SortedPacketListenerList.java:114) [ProtocolLib.jar:4.7.0]
+	at com.comphenix.protocol.injector.SortedPacketListenerList.invokePacketRecieving(SortedPacketListenerList.java:67) [ProtocolLib.jar:4.7.0]
+	at com.comphenix.protocol.injector.PacketFilterManager.handlePacket(PacketFilterManager.java:537) [ProtocolLib.jar:4.7.0]
+	at com.comphenix.protocol.injector.PacketFilterManager.invokePacketRecieving(PacketFilterManager.java:509) [ProtocolLib.jar:4.7.0]
+	at com.comphenix.protocol.injector.netty.ProtocolInjector.packetReceived(ProtocolInjector.java:360) [ProtocolLib.jar:4.7.0]
+	at com.comphenix.protocol.injector.netty.ProtocolInjector.onPacketReceiving(ProtocolInjector.java:325) [ProtocolLib.jar:4.7.0]
+	at com.comphenix.protocol.injector.netty.ChannelInjector.decode(ChannelInjector.java:593) [ProtocolLib.jar:4.7.0]
+	at io.netty.handler.codec.ByteToMessageDecoder.callDecode(ByteToMessageDecoder.java:249) [spigot.jar:git-Spigot-db6de12-18fbb24]
+	at io.netty.handler.codec.ByteToMessageDecoder.channelRead(ByteToMessageDecoder.java:149) [spigot.jar:git-Spigot-db6de12-18fbb24]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:333) [spigot.jar:git-Spigot-db6de12-18fbb24]
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:319) [spigot.jar:git-Spigot-db6de12-18fbb24]
+	at com.comphenix.protocol.injector.netty.ChannelInjector$2.channelRead(ChannelInjector.java:289) [ProtocolLib.jar:4.7.0]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:333) [spigot.jar:git-Spigot-db6de12-18fbb24]
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:319) [spigot.jar:git-Spigot-db6de12-18fbb24]
+	at io.netty.handler.codec.ByteToMessageDecoder.channelRead(ByteToMessageDecoder.java:163) [spigot.jar:git-Spigot-db6de12-18fbb24]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:333) [spigot.jar:git-Spigot-db6de12-18fbb24]
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:319) [spigot.jar:git-Spigot-db6de12-18fbb24]
+	at io.netty.handler.timeout.ReadTimeoutHandler.channelRead(ReadTimeoutHandler.java:150) [spigot.jar:git-Spigot-db6de12-18fbb24]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:333) [spigot.jar:git-Spigot-db6de12-18fbb24]
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:319) [spigot.jar:git-Spigot-db6de12-18fbb24]
+	at io.netty.channel.DefaultChannelPipeline.fireChannelRead(DefaultChannelPipeline.java:787) [spigot.jar:git-Spigot-db6de12-18fbb24]
+	at io.netty.channel.nio.AbstractNioByteChannel$NioByteUnsafe.read(AbstractNioByteChannel.java:130) [spigot.jar:git-Spigot-db6de12-18fbb24]
+	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:511) [spigot.jar:git-Spigot-db6de12-18fbb24]
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeysPlain(NioEventLoop.java:430) [spigot.jar:git-Spigot-db6de12-18fbb24]
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:384) [spigot.jar:git-Spigot-db6de12-18fbb24]
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:354) [spigot.jar:git-Spigot-db6de12-18fbb24]
+	at io.netty.util.concurrent.SingleThreadEventExecutor$2.run(SingleThreadEventExecutor.java:116) [spigot.jar:git-Spigot-db6de12-18fbb24]
+	at java.base/java.lang.Thread.run(Thread.java:831) [?:?]
+Caused by: net.minecraft.server.v1_8_R3.CancelledPacketHandleException*/
+
+
+
 public class Main extends JavaPlugin {
 	private final BlockOverride stainedglass = new BlockOverride(Block.getById(95));
 	private final List<Player> players = new ArrayList<>();
@@ -156,6 +195,7 @@ public class Main extends JavaPlugin {
 			this.setEnabled(false);
 			return;
 		}
+
 		npcManager = new NPCManager();
 		protocolManager = ProtocolLibrary.getProtocolManager();
 		Main main = this;
@@ -201,7 +241,6 @@ public class Main extends JavaPlugin {
 				}
 			}
 		});
-
 
 //		On affiche pas les armor stands serverOnly pour ca on utilise du code vole lol
 //		entityHider = new EntityHider(this, EntityHider.Policy.BLACKLIST);
@@ -340,6 +379,9 @@ public class Main extends JavaPlugin {
 			var6.printStackTrace();
 		}
 
+		if(npcManager!=null) {
+			npcManager.removeAllNpcs(this);
+		}
 
 		for (Hologram holo : HologramsAPI.getHolograms(this)) {
 			holo.delete();

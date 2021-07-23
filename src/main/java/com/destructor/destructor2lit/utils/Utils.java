@@ -120,6 +120,29 @@ public class Utils {
 		}
 	}
 
+	public static byte colorData(String colorName) {
+		switch (colorName) {
+			case "white":
+				return (0);
+			case "yellow":
+				return (4);
+			case "green":
+				return (5);
+			case "pink":
+				return (6);
+			case "gray":
+				return (7);
+			case "aqua":
+				return (9);
+			case "blue":
+				return (11);
+			case "red":
+				return (14);
+			default:
+				return (0);
+		}
+	}
+
 	public String bwName(Material Item) {
 		switch (Item) {
 			case IRON_INGOT:
@@ -286,7 +309,7 @@ public class Utils {
 			} else {
 				e.setVelocity(vector.multiply(1.0 / distance).add(e.getVelocity()));
 				if (e instanceof Player || e instanceof Zombie) {
-					logAttack(thrower.getUniqueId().toString(),e);
+					logAttack(thrower.getUniqueId().toString(), e);
 				}
 			}
 		}
@@ -336,7 +359,7 @@ public class Utils {
 		}
 	}
 
-	public void showArmor(Player player){
+	public void showArmor(Player player) {
 		PacketPlayOutEntityEquipment helmetPacket = new PacketPlayOutEntityEquipment(player.getEntityId(), 4, CraftItemStack.asNMSCopy(player.getInventory().getHelmet()));
 		PacketPlayOutEntityEquipment chestplatePacket = new PacketPlayOutEntityEquipment(player.getEntityId(), 3, CraftItemStack.asNMSCopy(player.getInventory().getChestplate()));
 		PacketPlayOutEntityEquipment leggingsPacket = new PacketPlayOutEntityEquipment(player.getEntityId(), 2, CraftItemStack.asNMSCopy(player.getInventory().getLeggings()));
@@ -351,9 +374,9 @@ public class Utils {
 		}
 	}
 
-	public void logAttack(String damagerUUID, Metadatable victim){
-		setMetadata(victim,"lastdamager",damagerUUID);
-		setMetadata(victim, "lastattack",new SystemClock().currentTimeMillis());
+	public void logAttack(String damagerUUID, Metadatable victim) {
+		setMetadata(victim, "lastdamager", damagerUUID);
+		setMetadata(victim, "lastattack", new SystemClock().currentTimeMillis());
 	}
 
    /* public ItemStack enchantedItemStack(Material material, Enchantment[] enchantments, int[] levels){
