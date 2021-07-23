@@ -40,14 +40,9 @@ import java.util.concurrent.ConcurrentMap;
 
 /*TODO LIST
 -Implementer les items spéciaux bedwars:
--bedbug -> reformer DreamDefender.java pour faire un Pet.java qui prends en parametre l'entité et son temps de vie
 -Ajouter les popup towers
 -World borders: si x ou z > ou < a mainlobby x ou z +- limite
 -creer une enum kill message
--implementer les morts:
--par fleche
--de feu
--par explosion
 -colorer le nom de certains items (ex: kb sticks en bleu)
 -creer un commande whitelist
 -base protection, tout les blocks au allentour du spawn + n blocks seront supprimes
@@ -156,6 +151,7 @@ public class Main extends JavaPlugin {
 	public ProtocolManager protocolManager;
 	private Utils utils = new Utils();
 	public EntityHider entityHider;
+	public int popupTowerSpeedMultiplier;
 
 
 	@Override
@@ -267,6 +263,8 @@ public class Main extends JavaPlugin {
 		Arrays.fill(beds, true);
 
 		attackTagMilis = getConfig().getLong("attacktagstaytime");
+
+		popupTowerSpeedMultiplier = getConfig().getInt("popuptowerspeedmultiplier");
 
 		//		On a plus besoin de check pour citizen pck on l'utilise plus :L
 ////        Check si citizen 2.0 est present

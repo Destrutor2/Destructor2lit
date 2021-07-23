@@ -19,6 +19,7 @@ com/destructor/destructor2lit/utils/FastBlockUpdate.class
 com/destructor/destructor2lit/enums/GameState.class
 com/destructor/destructor2lit/events/BedBreak.class
 com/destructor/destructor2lit/listeners/PlayersListeners$2.class
+com/destructor/destructor2lit/customItems/PopupTower.class
 com/destructor/destructor2lit/utils/CustomCharacters.class
 com/destructor/destructor2lit/customEntities/OwnedSilverfish$PathfinderGoalNearestAttackableBwPlayer.class
 com/destructor/destructor2lit/Main$2.class
@@ -40,6 +41,7 @@ com/destructor/destructor2lit/timers/DeathTimer.class
 com/destructor/destructor2lit/utils/EntityHider$Policy.class
 com/destructor/destructor2lit/utils/EntityHider.class
 com/destructor/destructor2lit/listeners/WorldListeners.class
+com/destructor/destructor2lit/customItems/PopupTower$1.class
 com/destructor/destructor2lit/customEntities/EntityTypes.class
 com/destructor/destructor2lit/enums/BwUpgrade.class
 com/destructor/destructor2lit/events/NpcClickEvent.class

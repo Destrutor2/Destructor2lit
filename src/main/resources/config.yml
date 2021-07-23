@@ -40,6 +40,8 @@ mainspawn:
   y: 120
   z: 0.5
 
+popuptowerspeedmultiplier: 4
+
 Generators:
 # Ces delays sont en ticks
 # faire en sorte que les delays soient des multiples de 5, 5*1.5 et 5*2 (par rapport aux upgrades)
