@@ -15,6 +15,7 @@ import com.destructor.destructor2lit.guis.Shop;
 import com.destructor.destructor2lit.timers.GamePhaseTimer;
 import com.destructor.destructor2lit.timers.WaitingScoreboardTimer;
 import com.destructor.destructor2lit.utils.Utils;
+import com.mysql.jdbc.Util;
 import de.slikey.effectlib.particle.ReflectionHandler;
 import net.minecraft.server.v1_8_R3.*;
 import org.apache.logging.log4j.core.helpers.SystemClock;
@@ -108,7 +109,7 @@ public class PlayersListeners implements Listener {
 							utils.setMetadata(player, "lastfb", 0);
 
 							if (main.hasBed(utils.getMetadata(entity, "color").asString())) {
-								Die.Die(player,main,BwDeaths.RECONNECT);
+								Die.Die(player, main, BwDeaths.RECONNECT);
 							} else {
 								player.setHealth(((Zombie) entity).getHealth());
 								player.getInventory().setArmorContents(main.offlinePlayersArmor.get(player.getUniqueId()));
@@ -261,7 +262,8 @@ public class PlayersListeners implements Listener {
 			Location tntloc = new Location(location.getWorld(), location.getX() + 0.5, location.getY() + 0.5, location.getZ() + 0.5);
 			block.setType(Material.AIR);
 			TNTPrimed tnt = player.getWorld().spawn(tntloc, TNTPrimed.class);
-			tnt.setFuseTicks(120);
+			tnt.setFuseTicks(60);
+			Utils.setMetadata(tnt, "owner", player.getUniqueId());
 			return;
 		}
 
@@ -278,7 +280,7 @@ public class PlayersListeners implements Listener {
 		}
 
 		if (block.getType().equals(Material.CHEST)) {
-			new PopupTower(main, block,player,main.popupTowerSpeedMultiplier);
+			new PopupTower(main, block, player, main.popupTowerSpeedMultiplier);
 		}
 
 		setPlacedBlock(block);
@@ -379,9 +381,10 @@ public class PlayersListeners implements Listener {
 			}
 		}
 
-		if (damager instanceof TNTPrimed && entity instanceof LivingEntity) {
+		if (damager instanceof TNTPrimed && entity instanceof Entity) {
 			e.setDamage(e.getDamage() / 7);
 			entity.setVelocity(new Vector((entity.getLocation().getX() - damager.getLocation().getX()), (entity.getLocation().getY() - damager.getLocation().getY()), (entity.getLocation().getZ() - damager.getLocation().getZ())).normalize().multiply(1.2));
+			Utils.logAttack(Utils.getMetadata((TNTPrimed) damager, "owner").asString(), entity);
 		}
 
 //		Si on lance une fleche ou une fireball a un pet, on cancel le degat
@@ -664,7 +667,7 @@ public class PlayersListeners implements Listener {
 	public void onMove(PlayerMoveEvent e) {
 //		Le truc pour si on tombe dans le void:
 		if (e.getTo().getY() < main.getConfig().getDouble("voidheight")) {
-			if(!Utils.getMetadata(e.getPlayer(),"alive").asBoolean()){
+			if (!Utils.getMetadata(e.getPlayer(), "alive").asBoolean()) {
 				e.getPlayer().teleport(main.spawn);
 				return;
 			}
@@ -675,7 +678,7 @@ public class PlayersListeners implements Listener {
 						return;
 
 
-			Die.Die(e.getPlayer(),main,BwDeaths.VOID);
+			Die.Die(e.getPlayer(), main, BwDeaths.VOID);
 		}
 
 		for (EntityPlayer npc : main.npcManager.npcs) {
@@ -712,7 +715,7 @@ public class PlayersListeners implements Listener {
 		}
 	}
 
-//	Ca c'est pour bypass la verification, ainsi que les joueurs morts ne puissent pas faire disparaitre les blocks
+	//	Ca c'est pour bypass la verification, ainsi que les joueurs morts ne puissent pas faire disparaitre les blocks
 	@EventHandler
 	public void onBlockCanBuild(BlockCanBuildEvent e) {
 		e.setBuildable(true);

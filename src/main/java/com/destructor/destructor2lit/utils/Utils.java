@@ -374,7 +374,7 @@ public class Utils {
 		}
 	}
 
-	public void logAttack(String damagerUUID, Metadatable victim) {
+	public static void logAttack(String damagerUUID, Metadatable victim) {
 		setMetadata(victim, "lastdamager", damagerUUID);
 		setMetadata(victim, "lastattack", new SystemClock().currentTimeMillis());
 	}

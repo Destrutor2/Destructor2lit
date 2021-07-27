@@ -40,7 +40,7 @@ mainspawn:
   y: 120
   z: 0.5
 
-popuptowerspeedmultiplier: 3
+popuptowerspeedmultiplier: 4
 
 Generators:
 # Ces delays sont en ticks

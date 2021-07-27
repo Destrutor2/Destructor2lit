@@ -7,6 +7,7 @@ import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketEvent;
 import com.comphenix.protocol.wrappers.EnumWrappers;
 import com.destructor.destructor2lit.commands.bedwarsCommand;
+import com.destructor.destructor2lit.commands.bedwarsCommandTab;
 import com.destructor.destructor2lit.commands.toggleparticulesCommand;
 import com.destructor.destructor2lit.customEntities.EntityTypes;
 import com.destructor.destructor2lit.enums.GamePhase;
@@ -298,6 +299,7 @@ public class Main extends JavaPlugin {
 
 //        Les commandes:
 		getCommand("bedwars").setExecutor(new bedwarsCommand(this));
+		getCommand("bedwars").setTabCompleter(new bedwarsCommandTab(this));
 		getCommand("toggleparticules").setExecutor(new toggleparticulesCommand(this));
 
 

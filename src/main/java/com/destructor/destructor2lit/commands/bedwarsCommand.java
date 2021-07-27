@@ -19,7 +19,7 @@ import java.util.Set;
 
 import static org.bukkit.Material.AIR;
 
-public class bedwarsCommand implements CommandExecutor {
+public class bedwarsCommand implements CommandExecutor{
 
 	private final Main main;
 
@@ -46,15 +46,17 @@ public class bedwarsCommand implements CommandExecutor {
 								"   Utilisez /bedwars help pour obtenir de l'aide\n" +
 								"                        Eldolfin#0001\n" +
 								ChatColor.GREEN + "----------------------------------------------------------------");
+				return true;
 			} else if (strings.length == 1 && strings[0].equalsIgnoreCase("help")) {
 				player.sendMessage(ChatColor.RED + "/bedwars" + ChatColor.GRAY + " - " + ChatColor.YELLOW + "montre la version");
 				player.sendMessage(ChatColor.RED + "/bedwars setspawn (red|blue|green|yellow|aqua|white|pink|gray)" + ChatColor.GRAY + " - " + ChatColor.YELLOW + "défini le spawn de la team spécifiée à la position centrée du joueur (le milieu du block sur lequel se trouve le joueur)");
 				player.sendMessage(ChatColor.RED + "/bedwars setbed (red|blue|green|yellow|aqua|white|pink|gray)" + ChatColor.GRAY + " - " + ChatColor.YELLOW + "défini le lit de la team au lit regardé par le joueur");
-				player.sendMessage(ChatColor.RED + "/bedwars addgen (team|diamond|emerald)" + ChatColor.GRAY + " - " + ChatColor.YELLOW + "ajoute un générateur");
+				player.sendMessage(ChatColor.RED + "/bedwars addgen (team|diamond|emerald) [red|blue|green|yellow|aqua|white|pink|gray]" + ChatColor.GRAY + " - " + ChatColor.YELLOW + "ajoute un générateur");
 				player.sendMessage(ChatColor.RED + "/bedwars delgen (team|diamond|emerald) (id)" + ChatColor.GRAY + " - " + ChatColor.YELLOW + "supprime le générateur spécifié");
 				player.sendMessage(ChatColor.RED + "/bedwars buildlimit" + ChatColor.GRAY + " - " + ChatColor.YELLOW + "affiche la limit de build sur ce serveur");
 				player.sendMessage(ChatColor.RED + "/bedwars setbuildlimit (0-255)" + ChatColor.GRAY + " - " + ChatColor.YELLOW + "défini la limit de build sur ce serveur");
 				player.sendMessage(ChatColor.RED + "/bedwars help" + ChatColor.GRAY + " - " + ChatColor.YELLOW + "affiche cette page");
+				return true;
 			} else if (strings.length == 1 && strings[0].equalsIgnoreCase("buildlimit")) {
 				player.sendMessage(ChatColor.WHITE + "La limite de cette map est: " + ChatColor.GOLD + main.getConfig().get("buildlimit"));
 			}

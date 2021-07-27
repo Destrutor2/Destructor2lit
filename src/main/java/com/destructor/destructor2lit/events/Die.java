@@ -301,28 +301,6 @@ public class Die {
 		for (Player p : main.getPlayers()) {
 			p.hidePlayer(player);
 		}
-
-		for (Entity e : player.getWorld().getEntities()) {
-			if (e instanceof IronGolem)
-				if (((IronGolem) e).getTarget() != null)
-					if (((IronGolem) e).getTarget().equals(player))
-						((IronGolem) e).setTarget(null);
-		}
-		main.getHiddenPlayers().add(player);
-		player.setItemOnCursor(null);
-		player.getInventory().setHelmet(null);
-		player.getInventory().setChestplate(null);
-		player.getInventory().setLeggings(null);
-		player.getInventory().setBoots(null);
-		player.getActivePotionEffects().clear();
-		player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 3600 * 20, 1, false, false));
-		player.teleport(main.spawn);
-		player.setAllowFlight(true);
-		player.setFlying(true);
-		if (main.hasBed(utils.getMetadata(player, "color").asString())) {
-			DeathTimer timer = new DeathTimer(player, main.getPlayers(), main);
-			timer.runTaskTimer(Main.getPlugin(Main.class), 0, 20);
-		}
 		String displayedMessage;
 
 		if (!lastdamager.equals("null") && (utils.getMetadata(player, "lastattack").asLong() > (new SystemClock().currentTimeMillis() - main.attackTagMilis))) {
@@ -357,6 +335,32 @@ public class Die {
 				}
 			}
 		}
+
+		for (Entity e : player.getWorld().getEntities()) {
+			if (e instanceof IronGolem)
+				if (((IronGolem) e).getTarget() != null)
+					if (((IronGolem) e).getTarget().equals(player))
+						((IronGolem) e).setTarget(null);
+		}
+		main.getHiddenPlayers().add(player);
+		player.setItemOnCursor(null);
+		player.getInventory().setHelmet(null);
+		player.getInventory().setChestplate(null);
+		player.getInventory().setLeggings(null);
+		player.getInventory().setBoots(null);
+		for(PotionEffect effect:player.getActivePotionEffects()){
+			player.removePotionEffect(effect.getType());
+		}
+		player.setFireTicks(0);
+		player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 3600 * 20, 1, false, false));
+		player.teleport(main.spawn);
+		player.setAllowFlight(true);
+		player.setFlying(true);
+		if (main.hasBed(utils.getMetadata(player, "color").asString())) {
+			DeathTimer timer = new DeathTimer(player, main.getPlayers(), main);
+			timer.runTaskTimer(Main.getPlugin(Main.class), 0, 20);
+		}
+
 		displayedMessage = displayedMessage.replaceAll("%bwplayer%", utils.getColor(player) + player.getDisplayName() + ChatColor.GRAY);
 
 		player.getInventory().clear();
@@ -375,10 +379,6 @@ public class Die {
 		if (!main.hasBed(utils.getMetadata(player, "color").asString())) {
 			player.sendMessage(ChatColor.RED + "You've been eliminated!" + ChatColor.WHITE + " (verifier ce message)");
 		}
-	}
-
-	private static void die(Player player, Main main, String killMessage) {
-		die(player, main, killMessage, "null");
 	}
 
 }
