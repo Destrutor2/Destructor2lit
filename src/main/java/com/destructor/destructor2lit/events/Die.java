@@ -16,9 +16,9 @@ import org.bukkit.potion.PotionEffectType;
 import java.util.UUID;
 
 public class Die {
-	public static void Void(Player player, Main main) {
+/*	public static void Void(Player player, Main main) {
 		die(player, main, "%bwplayer% was knocked into the void by %bwkiller%", "%bwplayer% fell in the void.");
-/*
+
 		Utils utils = new Utils();
 		String lastdamager = utils.getMetadata(player, "lastdamager").asString();
 		utils.setMetadata(player, "alive", false);
@@ -97,12 +97,12 @@ public class Die {
 				timer.runTaskTimer(Main.getPlugin(Main.class), 0, 20);
 			}
 		}
-*/
-	}
 
-	public static void Kill(Player player, Main main) {
+	}*/
+
+	/*public static void Kill(Player player, Main main) {
 		die(player, main, "%bwplayer% was killed by %bwkiller%");
-/*		Utils utils = new Utils();
+		Utils utils = new Utils();
 		boolean killerIsOwned;
 		Player killer;
 		if (entitykiller instanceof Player) {
@@ -165,12 +165,12 @@ public class Die {
 		if (main.hasBed(utils.getMetadata(player, "color").asString())) {
 			DeathTimer timer = new DeathTimer(player, players, main);
 			timer.runTaskTimer(Main.getPlugin(Main.class), 0, 20);
-		}*/
-	}
+		}
+	}*/
 
-	public static void Fall(Player player, Main main) {
+/*	public static void Fall(Player player, Main main) {
 		die(player, main, "%bwplayer% was knocked off a cliff by %bwkiller%", "%bwplayer% died.");
-/*
+
 		Utils utils = new Utils();
 		String lastdamager = utils.getMetadata(player, "lastdamager").asString();
 		utils.setMetadata(player, "alive", false);
@@ -259,13 +259,12 @@ public class Die {
 				DeathTimer timer = new DeathTimer(player, players, main);
 				timer.runTaskTimer(Main.getPlugin(Main.class), 0, 20);
 			}
-		}
-*/
-	}
 
-	public static void Reconnect(Player player, Main main) {
+	}*/
+
+/*	public static void Reconnect(Player player, Main main) {
 		die(player, main, "null", "null");
-/*
+
 		player.setHealth(20);
 		List<Player> players = main.getPlayers();
 		Utils utils = new Utils();
@@ -284,8 +283,8 @@ public class Die {
 		player.setFlying(true);
 		DeathTimer timer = new DeathTimer(player, players, main);
 		timer.runTaskTimer(Main.getPlugin(Main.class), 0, 20);
-*/
-	}
+
+	}*/
 
 	public static void Die(Player player, Main main, BwDeaths deathType) {
 		die(player, main, deathType.getDefaultKillMessage(), deathType.getDefaultDeathMessage());
@@ -301,28 +300,6 @@ public class Die {
 		player.setHealth(20);
 		for (Player p : main.getPlayers()) {
 			p.hidePlayer(player);
-		}
-
-		for (Entity e : player.getWorld().getEntities()) {
-			if (e instanceof IronGolem)
-				if (((IronGolem) e).getTarget() != null)
-					if (((IronGolem) e).getTarget().equals(player))
-						((IronGolem) e).setTarget(null);
-		}
-		main.getHiddenPlayers().add(player);
-		player.setItemOnCursor(null);
-		player.getInventory().setHelmet(null);
-		player.getInventory().setChestplate(null);
-		player.getInventory().setLeggings(null);
-		player.getInventory().setBoots(null);
-		player.getActivePotionEffects().clear();
-		player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 3600 * 20, 1, false, false));
-		player.teleport(main.spawn);
-		player.setAllowFlight(true);
-		player.setFlying(true);
-		if (main.hasBed(utils.getMetadata(player, "color").asString())) {
-			DeathTimer timer = new DeathTimer(player, main.getPlayers(), main);
-			timer.runTaskTimer(Main.getPlugin(Main.class), 0, 20);
 		}
 		String displayedMessage;
 
@@ -358,6 +335,32 @@ public class Die {
 				}
 			}
 		}
+
+		for (Entity e : player.getWorld().getEntities()) {
+			if (e instanceof IronGolem)
+				if (((IronGolem) e).getTarget() != null)
+					if (((IronGolem) e).getTarget().equals(player))
+						((IronGolem) e).setTarget(null);
+		}
+		main.getHiddenPlayers().add(player);
+		player.setItemOnCursor(null);
+		player.getInventory().setHelmet(null);
+		player.getInventory().setChestplate(null);
+		player.getInventory().setLeggings(null);
+		player.getInventory().setBoots(null);
+		for(PotionEffect effect:player.getActivePotionEffects()){
+			player.removePotionEffect(effect.getType());
+		}
+		player.setFireTicks(0);
+		player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 3600 * 20, 1, false, false));
+		player.teleport(main.spawn);
+		player.setAllowFlight(true);
+		player.setFlying(true);
+		if (main.hasBed(utils.getMetadata(player, "color").asString())) {
+			DeathTimer timer = new DeathTimer(player, main.getPlayers(), main);
+			timer.runTaskTimer(Main.getPlugin(Main.class), 0, 20);
+		}
+
 		displayedMessage = displayedMessage.replaceAll("%bwplayer%", utils.getColor(player) + player.getDisplayName() + ChatColor.GRAY);
 
 		player.getInventory().clear();
@@ -376,10 +379,6 @@ public class Die {
 		if (!main.hasBed(utils.getMetadata(player, "color").asString())) {
 			player.sendMessage(ChatColor.RED + "You've been eliminated!" + ChatColor.WHITE + " (verifier ce message)");
 		}
-	}
-
-	private static void die(Player player, Main main, String killMessage) {
-		die(player, main, killMessage, "null");
 	}
 
 }

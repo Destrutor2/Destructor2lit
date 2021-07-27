@@ -105,11 +105,11 @@ public class StartTimer extends BukkitRunnable {
 				for (Player player : Bukkit.getOnlinePlayers()) {
 					player.sendMessage(
 							ChatColor.GREEN + "" +ChatColor.BOLD+ "▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬\n" +
-									ChatColor.WHITE + "" + ChatColor.BOLD + "                            Bed Wars\n" +
-									ChatColor.YELLOW + "" + ChatColor.BOLD + "         Protect your bed and destroy the enemy beds.\n" +
-									"          Upgrade yourself and your team by collecting\n" +
-									"        Iron, Gold, Emerald and Diamond from generators\n" +
-									"                  to access powerful upgrades.\n" +
+									ChatColor.WHITE + "" + ChatColor.BOLD + "                      Bed Wars\n" +
+									ChatColor.YELLOW + "" + ChatColor.BOLD + "   Protect your bed and destroy the enemy beds.\n" +
+									"    Upgrade yourself and your team by collecting\n" +
+									"  Iron, Gold, Emerald and Diamond from generators\n" +
+									"            to access powerful upgrades.\n" +
 									ChatColor.GREEN +""+ChatColor.BOLD+ "▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬");
 
 				}

@@ -7,6 +7,7 @@ import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketEvent;
 import com.comphenix.protocol.wrappers.EnumWrappers;
 import com.destructor.destructor2lit.commands.bedwarsCommand;
+import com.destructor.destructor2lit.commands.bedwarsCommandTab;
 import com.destructor.destructor2lit.commands.toggleparticulesCommand;
 import com.destructor.destructor2lit.customEntities.EntityTypes;
 import com.destructor.destructor2lit.enums.GamePhase;
@@ -40,14 +41,9 @@ import java.util.concurrent.ConcurrentMap;
 
 /*TODO LIST
 -Implementer les items spéciaux bedwars:
--bedbug -> reformer DreamDefender.java pour faire un Pet.java qui prends en parametre l'entité et son temps de vie
 -Ajouter les popup towers
 -World borders: si x ou z > ou < a mainlobby x ou z +- limite
 -creer une enum kill message
--implementer les morts:
--par fleche
--de feu
--par explosion
 -colorer le nom de certains items (ex: kb sticks en bleu)
 -creer un commande whitelist
 -base protection, tout les blocks au allentour du spawn + n blocks seront supprimes
@@ -156,6 +152,7 @@ public class Main extends JavaPlugin {
 	public ProtocolManager protocolManager;
 	private Utils utils = new Utils();
 	public EntityHider entityHider;
+	public int popupTowerSpeedMultiplier;
 
 
 	@Override
@@ -268,6 +265,8 @@ public class Main extends JavaPlugin {
 
 		attackTagMilis = getConfig().getLong("attacktagstaytime");
 
+		popupTowerSpeedMultiplier = getConfig().getInt("popuptowerspeedmultiplier");
+
 		//		On a plus besoin de check pour citizen pck on l'utilise plus :L
 ////        Check si citizen 2.0 est present
 ////        ########  A REPARER ne detecte pas bien citizens pour l'instant :(  ##########################
@@ -300,6 +299,7 @@ public class Main extends JavaPlugin {
 
 //        Les commandes:
 		getCommand("bedwars").setExecutor(new bedwarsCommand(this));
+		getCommand("bedwars").setTabCompleter(new bedwarsCommandTab(this));
 		getCommand("toggleparticules").setExecutor(new toggleparticulesCommand(this));
 
 
