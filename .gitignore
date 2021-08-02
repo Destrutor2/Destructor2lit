@@ -37,5 +37,8 @@ ehthumbs.db
 Thumbs.db
 
 
-/out/
-/target/
+.classpath
+.project
+.DS_Store
+.settings/
+target/
