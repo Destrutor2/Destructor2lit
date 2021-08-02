@@ -1,6 +1,7 @@
 package com.destructor.destructor2lit.commands;
 
 import com.destructor.destructor2lit.Main;
+import com.destructor.destructor2lit.events.TriggerTrap;
 import com.destructor.destructor2lit.utils.FastBlockUpdate;
 import com.destructor.destructor2lit.utils.Utils;
 import org.apache.logging.log4j.core.helpers.SystemClock;
@@ -14,12 +15,14 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.lang.reflect.Array;
 import java.time.Clock;
+import java.util.Arrays;
 import java.util.Set;
 
 import static org.bukkit.Material.AIR;
 
-public class bedwarsCommand implements CommandExecutor{
+public class bedwarsCommand implements CommandExecutor {
 
 	private final Main main;
 
@@ -33,7 +36,7 @@ public class bedwarsCommand implements CommandExecutor{
 		if (commandSender instanceof Player) {
 			player = (Player) commandSender;
 		} else {
-			System.out.println("Commandes seulement disponibles par les joueurs pour l'instant :/");
+			commandSender.sendMessage("This command only is available to players.");
 			return false;
 		}
 
@@ -53,8 +56,10 @@ public class bedwarsCommand implements CommandExecutor{
 				player.sendMessage(ChatColor.RED + "/bedwars setbed (red|blue|green|yellow|aqua|white|pink|gray)" + ChatColor.GRAY + " - " + ChatColor.YELLOW + "défini le lit de la team au lit regardé par le joueur");
 				player.sendMessage(ChatColor.RED + "/bedwars addgen (team|diamond|emerald) [red|blue|green|yellow|aqua|white|pink|gray]" + ChatColor.GRAY + " - " + ChatColor.YELLOW + "ajoute un générateur");
 				player.sendMessage(ChatColor.RED + "/bedwars delgen (team|diamond|emerald) (id)" + ChatColor.GRAY + " - " + ChatColor.YELLOW + "supprime le générateur spécifié");
+				player.sendMessage(ChatColor.RED + "/bedwars addnpc (shop|upgrade)" + ChatColor.GRAY + " - " + ChatColor.YELLOW + "permet de créer un npc de type shop, upgrade");
 				player.sendMessage(ChatColor.RED + "/bedwars buildlimit" + ChatColor.GRAY + " - " + ChatColor.YELLOW + "affiche la limit de build sur ce serveur");
 				player.sendMessage(ChatColor.RED + "/bedwars setbuildlimit (0-255)" + ChatColor.GRAY + " - " + ChatColor.YELLOW + "défini la limit de build sur ce serveur");
+				player.sendMessage(ChatColor.RED + "/bedwars teststart" + ChatColor.GRAY + " - " + ChatColor.YELLOW + "permet de commencer une game à une personne");
 				player.sendMessage(ChatColor.RED + "/bedwars help" + ChatColor.GRAY + " - " + ChatColor.YELLOW + "affiche cette page");
 				return true;
 			} else if (strings.length == 1 && strings[0].equalsIgnoreCase("buildlimit")) {
@@ -119,7 +124,7 @@ public class bedwarsCommand implements CommandExecutor{
 
 				} else if (strings.length == 1 && strings[0].equalsIgnoreCase("forcestart")) {
 					main.startTimer.fastForwardStartTimer();
-				} else if (strings.length == 1 && strings[0].equalsIgnoreCase("test")) {
+				} else if (strings.length == 3 && strings[0].equalsIgnoreCase("test")) {
 					player.sendMessage("Coucou");
 				} else if ((strings.length == 2 || strings.length == 3) && strings[0].equalsIgnoreCase("addgen")) {
 					if (strings[1].equalsIgnoreCase("team") || strings[1].equalsIgnoreCase("diamond") || strings[1].equalsIgnoreCase("emerald")) {
@@ -216,6 +221,14 @@ public class bedwarsCommand implements CommandExecutor{
 						main.saveConfig();
 					}
 				}
+				if (strings[0].equalsIgnoreCase("teststart")) {
+					if (Bukkit.getOnlinePlayers().size() != 1) {
+						player.sendMessage(ChatColor.RED + "Test Start is only available when 1 player is online!");
+						return false;
+					}
+					main.StartStartTimer(true);
+				}
+
 				if (strings[0].equalsIgnoreCase("addnpc")) {
 					main.npcManager.createNPC(player, strings, main);
 				}

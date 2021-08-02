@@ -10,6 +10,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -17,6 +18,7 @@ import org.bukkit.entity.Zombie;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.material.MaterialData;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.metadata.MetadataValue;
 import org.bukkit.metadata.Metadatable;
@@ -52,8 +54,38 @@ public class Utils {
 		return it;
 	}
 
+	public ItemStack customItem(ItemStack itemStack, String customName, String[] Lore, Boolean enchantGlint) {
+		ItemStack it = customItem(itemStack, customName, Lore);
+		it.addEnchantment(Enchantment.SILK_TOUCH, 0);
+		ItemMeta itemMeta = it.getItemMeta();
+		itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+		it.setItemMeta(itemMeta);
+		return it;
+	}
+
+	public ItemStack customItem(Material material, String customName, String[] Lore, Boolean enchantGlint) {
+		ItemStack it = customItem(new ItemStack(material), customName, Lore);
+		if (enchantGlint) {
+			it.addUnsafeEnchantment(Enchantment.SILK_TOUCH, 0);
+			ItemMeta itemMeta = it.getItemMeta();
+			itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+			it.setItemMeta(itemMeta);
+		}
+		return it;
+	}
+
 	public ItemStack customItem(Material material, String customName, int Nombre, String[] Lore) {
 		ItemStack it = new ItemStack(material, Nombre);
+		ItemMeta itMeta = it.getItemMeta();
+		itMeta.setDisplayName(customName);
+		itMeta.setLore(Arrays.asList(Lore));
+		itMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+		it.setItemMeta(itMeta);
+		return it;
+	}
+
+	public ItemStack customItem(Material material, String customName, int Nombre, String[] Lore, byte data) {
+		ItemStack it = new ItemStack(material, Nombre, data);
 		ItemMeta itMeta = it.getItemMeta();
 		itMeta.setDisplayName(customName);
 		itMeta.setLore(Arrays.asList(Lore));
@@ -225,6 +257,12 @@ public class Utils {
 		setMetadata(player, "sharp", false);
 		setMetadata(player, "protection", 0);
 		setMetadata(player, "haste", 0);
+		setMetadata(player, "forge", 0);
+		setMetadata(player, "healpool", false);
+		setMetadata(player, "dragonbuff", false);
+		setMetadata(player, "trap1", 0);
+		setMetadata(player, "trap2", 0);
+		setMetadata(player, "trap3", 0);
 		setMetadata(player, "alive", true);
 		setMetadata(player, "color", "none");
 		setMetadata(player, "spawnX", 0.5);
@@ -254,6 +292,13 @@ public class Utils {
 			}
 		}
 		return 0;
+	}
+
+	public static void addEnchantGlint(ItemStack itemStack){
+		itemStack.addUnsafeEnchantment(Enchantment.DURABILITY,0);
+		ItemMeta itemMeta = itemStack.getItemMeta();
+		itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+		itemStack.setItemMeta(itemMeta);
 	}
 
 	public boolean doKnockback(Location center, double radius, double multiplier, double explosionCenterModifierX, double explosionCenterModifierY, double explosionCenterModifierZ, Player thrower, double throwerMultiplier, double throwerVelocityModifier, Main main) {
@@ -359,7 +404,7 @@ public class Utils {
 		}
 	}
 
-	public void showArmor(Player player) {
+	public static void showArmor(Player player) {
 		PacketPlayOutEntityEquipment helmetPacket = new PacketPlayOutEntityEquipment(player.getEntityId(), 4, CraftItemStack.asNMSCopy(player.getInventory().getHelmet()));
 		PacketPlayOutEntityEquipment chestplatePacket = new PacketPlayOutEntityEquipment(player.getEntityId(), 3, CraftItemStack.asNMSCopy(player.getInventory().getChestplate()));
 		PacketPlayOutEntityEquipment leggingsPacket = new PacketPlayOutEntityEquipment(player.getEntityId(), 2, CraftItemStack.asNMSCopy(player.getInventory().getLeggings()));
@@ -379,6 +424,34 @@ public class Utils {
 		setMetadata(victim, "lastattack", new SystemClock().currentTimeMillis());
 	}
 
+	private final static TreeMap<Integer, String> map = new TreeMap<Integer, String>();
+
+	static {
+
+		map.put(1000, "M");
+		map.put(900, "CM");
+		map.put(500, "D");
+		map.put(400, "CD");
+		map.put(100, "C");
+		map.put(90, "XC");
+		map.put(50, "L");
+		map.put(40, "XL");
+		map.put(10, "X");
+		map.put(9, "IX");
+		map.put(5, "V");
+		map.put(4, "IV");
+		map.put(1, "I");
+
+	}
+
+	public final static String toRoman(int number) {
+		int l = map.floorKey(number);
+		if (number == l) {
+			return map.get(number);
+		}
+		return map.get(l) + toRoman(number - l);
+	}
+
    /* public ItemStack enchantedItemStack(Material material, Enchantment[] enchantments, int[] levels){
         if (!(enchantments.length==levels.length)){return new ItemStack(Material.BARRIER,1);}
         ItemStack itemStack=new ItemStack(material,1);
@@ -386,4 +459,5 @@ public class Utils {
             itemStack.addUnsafeEnchantment();
         }
     }*/
+
 }

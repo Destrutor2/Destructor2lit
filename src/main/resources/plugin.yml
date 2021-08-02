@@ -9,7 +9,7 @@ commands:
     aliases: [l, hub]
   bedwars:
     description: Commande principale du plugin
-    aliases: [bw, Bedwars]
+    aliases: [bw, bedw, destructor2lit]
   toggleparticules:
     description: Activer/Désactiver les particules
     aliases: [togpar,toggleparticule]

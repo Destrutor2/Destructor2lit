@@ -18,6 +18,8 @@ import org.bukkit.craftbukkit.v1_8_R3.CraftServer;
 import org.bukkit.craftbukkit.v1_8_R3.CraftWorld;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_8_R3.scoreboard.CraftScoreboard;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
 import java.lang.reflect.InvocationTargetException;
@@ -29,7 +31,7 @@ public class NPCManager {
 	MinecraftServer nmsServer;
 	public List<Integer> shops = new ArrayList<>();
 	public List<Integer> upgrades = new ArrayList<>();
-	public List<EntityPlayer> npcs = new ArrayList<>();
+	public List<EntityLiving> npcs = new ArrayList<>();
 
 
 	public NPCManager() {
@@ -69,9 +71,6 @@ public class NPCManager {
 				player.sendMessage(ChatColor.RED + "Le deuxième argument doit être shop ou upgrade!");
 				return;
 			}
-		} else if (args.length == 1) {
-			main.getConfig().set("npcs." + gameProfile.getId() + ".type", "null");
-			player.sendMessage(ChatColor.GREEN + "Le npc " + ChatColor.WHITE + gameProfile.getId().toString() + ChatColor.GREEN + " a été créé avec le type " + ChatColor.RED + "null");
 		} else {
 			player.sendMessage(ChatColor.RED + "Nombre d'argument incorrect!");
 			return;
@@ -171,22 +170,25 @@ public class NPCManager {
 		showNpcs(main, players);
 	}
 
-	public void reloadNpc(EntityPlayer npc, Player player) {
+	public void reloadNpc(EntityLiving npc, Player player) {
 		PlayerConnection connection = ((CraftPlayer) player).getHandle().playerConnection;
-		connection.sendPacket(new PacketPlayOutNamedEntitySpawn(npc));
+		if (npc instanceof EntityPlayer)
+			connection.sendPacket(new PacketPlayOutNamedEntitySpawn((EntityHuman) npc));
+//		else
+//			connection.sendPacket(new PacketPlayOutSpawnEntity(npc,npc.getId()));
 
 	}
 
 	public void removeAllNpcs(Main main) {
-		for (EntityPlayer npc : npcs) {
+		for (EntityLiving npc : npcs) {
 			PacketContainer packet = main.protocolManager.createPacket(PacketType.Play.Server.PLAYER_INFO);
 			packet.getPlayerInfoAction().write(0, EnumWrappers.PlayerInfoAction.REMOVE_PLAYER);
 			List<PlayerInfoData> dataList = new ArrayList<>();
-			dataList.add(new PlayerInfoData(new WrappedGameProfile(npc.getUniqueID(),npc.getName()),1, EnumWrappers.NativeGameMode.CREATIVE, WrappedChatComponent.fromText(npc.getName())));
-			packet.getPlayerInfoDataLists().write(0,dataList);
+			dataList.add(new PlayerInfoData(new WrappedGameProfile(npc.getUniqueID(), npc.getName()), 1, EnumWrappers.NativeGameMode.CREATIVE, WrappedChatComponent.fromText(npc.getName())));
+			packet.getPlayerInfoDataLists().write(0, dataList);
 			main.protocolManager.broadcastServerPacket(packet);
 			packet = main.protocolManager.createPacket(PacketType.Play.Server.ENTITY_DESTROY);
-			packet.getIntegerArrays().write(0,new int[]{npc.getId()});
+			packet.getIntegerArrays().write(0, new int[]{npc.getId()});
 			main.protocolManager.broadcastServerPacket(packet);
 //			for (Player player : Bukkit.getOnlinePlayers()) {
 //				try {
@@ -196,6 +198,10 @@ public class NPCManager {
 //				}
 //			}
 		}
+	}
+
+	public void addEntity(EntityLiving entityLiving) {
+		npcs.add(entityLiving);
 	}
 
 
