@@ -1,5 +1,6 @@
-package com.destructor.destructor2lit;
+package com.destructor.destructor2lit.gens;
 
+import com.destructor.destructor2lit.Main;
 import com.destructor.destructor2lit.enums.GameState;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -45,7 +46,7 @@ public class TeamGen {
 		start();
 	}
 
-	public void start() {
+	private void start() {
 		new BukkitRunnable() {
 			@Override
 			public void run() {
@@ -53,7 +54,7 @@ public class TeamGen {
 					if (ironIndex >= nextIron) {
 						if (nearbyIron < 48) {
 							Item it = location.getWorld().dropItem(location, new ItemStack(Material.IRON_INGOT));
-							it.setMetadata("splitable",new FixedMetadataValue(main,true));
+							it.setMetadata("nonstackable",new FixedMetadataValue(main,true));
 							it.setVelocity(new Vector(0, 0, 0));
 						}
 						nextIron = random.nextInt(maxIronDelay / ticksToTry);
@@ -73,6 +74,7 @@ public class TeamGen {
 					if (goldIndex >= nextGold) {
 						if (nearbyGold < 12) {
 							Item it = location.getWorld().dropItem(location, new ItemStack(Material.GOLD_INGOT));
+							it.setMetadata("nonstackable",new FixedMetadataValue(main,true));
 							it.setVelocity(new Vector(0, 0, 0));
 						}
 						nextGold = minGoldDelay / ticksToTry + random.nextInt(maxGoldDelay / ticksToTry - minGoldDelay / ticksToTry);
@@ -96,7 +98,6 @@ public class TeamGen {
 	public byte getLvl() {
 		return lvl;
 	}
-
 
 	public void setLvl(byte lvl) {
 		this.lvl = lvl;

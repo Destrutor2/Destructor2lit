@@ -196,7 +196,7 @@ public class WorldListeners implements Listener {
 
 	@EventHandler
 	public void onItemMerge(ItemMergeEvent e) {
-		if (e.getEntity().hasMetadata("splitable") || e.getTarget().hasMetadata("splitable")) {
+		if (e.getEntity().hasMetadata("nonstackable") || e.getTarget().hasMetadata("nonstackable")) {
 			e.setCancelled(true);
 		}
 	}
@@ -252,6 +252,12 @@ public class WorldListeners implements Listener {
 		customArrow.lastYaw = nmsOldArrow.lastYaw;
 
 		((CraftArrow) e.getProjectile()).setHandle(customArrow);
+	}
+
+	@EventHandler
+	public void onArmorStandDamage(EntityDamageEvent e){
+		if(e.getEntity() instanceof ArmorStand)
+			e.setCancelled(true);
 	}
 
 	private ArrayList<Player> getNearbyPlayers(Location source) {

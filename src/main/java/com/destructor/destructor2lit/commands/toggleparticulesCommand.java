@@ -15,6 +15,10 @@ public class toggleparticulesCommand implements CommandExecutor {
 
 	@Override
 	public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
+		if(!(commandSender instanceof Player)){
+			commandSender.sendMessage("This command only is available to players.");
+			return false;
+		}
 		if(command.getName().equalsIgnoreCase("toggleparticules") && commandSender instanceof Player){
 			if(main.noAnimationPlayers.contains(commandSender)){
 				main.noAnimationPlayers.remove(commandSender);

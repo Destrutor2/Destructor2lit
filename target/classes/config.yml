@@ -39,6 +39,8 @@ mainspawn:
   x: 0.5
   y: 120
   z: 0.5
+#Rayon d'effet des traps a partir du milieu du lit
+traptriggerradius : 11.0
 
 popuptowerspeedmultiplier: 4
 

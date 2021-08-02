@@ -1,6 +1,5 @@
 package com.destructor.destructor2lit.listeners;
 
-import com.comphenix.protocol.events.PacketContainer;
 import com.destructor.destructor2lit.*;
 import com.destructor.destructor2lit.customEntities.BwPet;
 import com.destructor.destructor2lit.customItems.PopupTower;
@@ -11,12 +10,12 @@ import com.destructor.destructor2lit.enums.BwDeaths;
 import com.destructor.destructor2lit.enums.GameState;
 import com.destructor.destructor2lit.events.BedBreak;
 import com.destructor.destructor2lit.events.Die;
+import com.destructor.destructor2lit.events.TriggerTrap;
 import com.destructor.destructor2lit.guis.Shop;
+import com.destructor.destructor2lit.guis.Upgrades;
 import com.destructor.destructor2lit.timers.GamePhaseTimer;
 import com.destructor.destructor2lit.timers.WaitingScoreboardTimer;
 import com.destructor.destructor2lit.utils.Utils;
-import com.mysql.jdbc.Util;
-import de.slikey.effectlib.particle.ReflectionHandler;
 import net.minecraft.server.v1_8_R3.*;
 import org.apache.logging.log4j.core.helpers.SystemClock;
 import org.bukkit.Achievement;
@@ -28,7 +27,6 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -149,7 +147,7 @@ public class PlayersListeners implements Listener {
 				new Utils().initPlayerMetadata(player);
 			}
 			if (main.getPlayers().size() == 2) {
-				main.StartStartTimer();
+				main.StartStartTimer(false);
 			}
 		}
 		if (!spec) {
@@ -320,11 +318,14 @@ public class PlayersListeners implements Listener {
 			e.setCancelled(true);
 		}
 
-		if (inv.getSize() == 54) {
+		if (inv.getName().equals("Quick Buy") || inv.getName().equals("Blocks") || inv.getName().equals("Melee") || inv.getName().equals("Armor") || inv.getName().equals("Tools") || inv.getName().equals("Ranged") || inv.getName().equals("Potions") || inv.getName().equals("Utility")) {
+			Shop.ShopClick(e,main);
 			e.setCancelled(true);
-			if (inv.getName().equals("Quick Buy") || inv.getName().equals("Blocks") || inv.getName().equals("Melee") || inv.getName().equals("Armor") || inv.getName().equals("Tools") || inv.getName().equals("Ranged") || inv.getName().equals("Potions") || inv.getName().equals("Utility")) {
-				Shop.ShopClick(e);
-			}
+		}
+
+		if (inv.getName().equalsIgnoreCase("Queue a trap") || inv.getName().equalsIgnoreCase("Upgrades & Traps")) {
+			Upgrades.UpgradeClick(e, main);
+			e.setCancelled(true);
 		}
 
 		if (player.getFallDistance() >= 1) {
@@ -681,7 +682,15 @@ public class PlayersListeners implements Listener {
 			Die.Die(e.getPlayer(), main, BwDeaths.VOID);
 		}
 
-		for (EntityPlayer npc : main.npcManager.npcs) {
+		if (Utils.getMetadata(e.getPlayer(), "alive").asBoolean()) {
+			for (BwTeam team : main.getTeams()) {
+				if (e.getTo().distanceSquared(team.getBaseCenter()) < main.trapTriggerRadiusSquared) {
+					new TriggerTrap(e.getPlayer(), team, main);
+				}
+			}
+		}
+
+		for (EntityLiving npc : main.npcManager.npcs) {
 //			On fait bouger la tete des npcs
 			if (npc.getBukkitEntity().getLocation().distance(e.getTo()) < 15 && new Utils().getMetadata(e.getPlayer(), "alive").asBoolean()) {
 				Player target = e.getPlayer();
@@ -700,8 +709,8 @@ public class PlayersListeners implements Listener {
 				for (Entity entity : npc.getBukkitEntity().getNearbyEntities(30, 30, 30)) {
 					if (entity instanceof Player) {
 						PlayerConnection connection = ((CraftPlayer) entity).getHandle().playerConnection;
-						connection.sendPacket(new PacketPlayOutEntity.PacketPlayOutEntityLook(npc.getId(), (byte) ((npc.yaw % 360.) * 256 / 360), (byte) ((npc.pitch % 360.) * 256 / 360), false));
-						connection.sendPacket(new PacketPlayOutEntityHeadRotation(npc, (byte) ((npc.yaw % 360.) * 256 / 360)));
+						connection.sendPacket(new PacketPlayOutEntity.PacketPlayOutEntityLook(npc.getId(), (byte) ((npc.yaw % 360) * 256 / 360), (byte) ((npc.pitch % 360) * 256 / 360), false));
+						connection.sendPacket(new PacketPlayOutEntityHeadRotation(npc, (byte) ((npc.yaw % 360) * 256 / 360)));
 					}
 				}
 			}
@@ -769,7 +778,7 @@ public class PlayersListeners implements Listener {
 
 	@EventHandler
 	public void onPlayerTeleportNearNpc(PlayerTeleportEvent e) {
-		for (EntityPlayer npc : main.npcManager.npcs)
+		for (EntityLiving npc : main.npcManager.npcs)
 			if (e.getTo().distance(npc.getBukkitEntity().getLocation()) < 90 && e.getFrom().distance(npc.getBukkitEntity().getLocation()) >= 90) {
 				main.npcManager.reloadNpc(npc, e.getPlayer());
 			}

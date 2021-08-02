@@ -15,8 +15,9 @@ import java.util.Map;
 public enum EntityTypes {
 	//NAME("Entity name", Entity ID, yourcustomclass.class);
 	ANGRY_GOLEM("AngryGolem", 99, AngryIronGolem.class, EntityIronGolem.class),
-	OWNER_SILVERFISH("Owned Silverfish",60, OwnedSilverfish.class,EntitySilverfish.class),
-	CUSTOM_ARROW("Custom Arrow",10, CustomArrow.class, EntityArrow.class);
+	OWNER_SILVERFISH("Owned Silverfish", 60, OwnedSilverfish.class, EntitySilverfish.class),
+	CUSTOM_ARROW("Custom Arrow", 10, CustomArrow.class, EntityArrow.class);
+//	GENERATOR("Generator", 30, Generator.class, EntityArmorStand.class);
 
 
 	private String name;
@@ -25,8 +26,8 @@ public enum EntityTypes {
 	private Class<? extends EntityInsentient> nmsClass;
 
 
-	private EntityTypes(String name, int id, Class<? extends Entity> custom,Class<? extends Entity> nmsClass) {
-		addToMaps(name, id,nmsClass,custom);
+	private EntityTypes(String name, int id, Class<? extends Entity> custom, Class<? extends Entity> nmsClass) {
+		addToMaps(name, id, nmsClass, custom);
 	}
 
 	public String getName() {
@@ -57,6 +58,7 @@ public enum EntityTypes {
 //		entity.getBukkitEntity().teleport(loc.add(0, 2, 0));
 
 	}
+
 	private static void addToMaps(String name, int id, Class<? extends Entity> nmsClass, Class<? extends Entity> customClass) {
 //		//getPrivateField is the method from above.
 //		//Remove the lines with // in front of them if you want to override default entities (You'd have to remove the default entity from the map first though).

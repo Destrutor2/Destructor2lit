@@ -3,7 +3,9 @@ package com.destructor.destructor2lit.timers;
 import com.destructor.destructor2lit.enums.GamePhase;
 import com.destructor.destructor2lit.enums.GameState;
 import com.destructor.destructor2lit.Main;
-import com.destructor.destructor2lit.TeamGen;
+import com.destructor.destructor2lit.enums.RegularGenType;
+import com.destructor.destructor2lit.gens.RegularGen;
+import com.destructor.destructor2lit.gens.TeamGen;
 import com.destructor.destructor2lit.utils.FastBlockUpdate;
 import com.destructor.destructor2lit.utils.Title;
 import com.destructor.destructor2lit.utils.Utils;
@@ -26,11 +28,14 @@ public class StartTimer extends BukkitRunnable {
 	public int timer = 20;
 	int[] sound = {20, 10, 5, 4, 3, 2, 1};
 	Main main;
+	Boolean forced;
 
-	public StartTimer(Main main, int timer) {
+	public StartTimer(Main main, int timer, Boolean forced) {
 		this.main = main;
-		this.timer = timer;
+		this.timer = forced ? 1 : timer;
+		this.forced = forced;
 	}
+
 
 	public void fastForwardStartTimer() {
 		timer = 1;
@@ -38,7 +43,7 @@ public class StartTimer extends BukkitRunnable {
 
 	@Override
 	public void run() {
-		if (Bukkit.getOnlinePlayers().size() >= 2) {
+		if (Bukkit.getOnlinePlayers().size() >= 2 || this.forced) {
 			for (int s : sound) {
 				if (timer == s) {
 					for (Player player : Bukkit.getOnlinePlayers()) {
@@ -97,20 +102,20 @@ public class StartTimer extends BukkitRunnable {
 				LeatherArmorMeta coloredArmorMeta = (LeatherArmorMeta) chestplate.getItemMeta();
 				coloredArmorMeta.spigot().setUnbreakable(true);
 				coloredArmorMeta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
-				ItemStack woodSword = new ItemStack(Material.WOOD_SWORD,1);
-				ItemMeta woodSwordMeta= woodSword.getItemMeta();
+				ItemStack woodSword = new ItemStack(Material.WOOD_SWORD, 1);
+				ItemMeta woodSwordMeta = woodSword.getItemMeta();
 				woodSwordMeta.spigot().setUnbreakable(true);
 				woodSwordMeta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
 				woodSword.setItemMeta(woodSwordMeta);
 				for (Player player : Bukkit.getOnlinePlayers()) {
 					player.sendMessage(
-							ChatColor.GREEN + "" +ChatColor.BOLD+ "▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬\n" +
+							ChatColor.GREEN + "" + ChatColor.BOLD + "▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬\n" +
 									ChatColor.WHITE + "" + ChatColor.BOLD + "                      Bed Wars\n" +
 									ChatColor.YELLOW + "" + ChatColor.BOLD + "   Protect your bed and destroy the enemy beds.\n" +
 									"    Upgrade yourself and your team by collecting\n" +
 									"  Iron, Gold, Emerald and Diamond from generators\n" +
 									"            to access powerful upgrades.\n" +
-									ChatColor.GREEN +""+ChatColor.BOLD+ "▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬");
+									ChatColor.GREEN + "" + ChatColor.BOLD + "▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬");
 
 				}
 
@@ -119,7 +124,7 @@ public class StartTimer extends BukkitRunnable {
 				Utils utils = new Utils();
 				List<Player> uncolorredPlayers = new ArrayList<>(main.getPlayers());
 				List<String> unusedcolors = new ArrayList<>();
-				String[] colors = {"red", "blue", "green", "yellow", "aqua", "white", "pink", "gray"};
+				List<String> colors = main.colors;
 				for (String s : colors) {
 					if (uncolorredPlayers.size() > 0) {
 						int r = random.nextInt(uncolorredPlayers.size());
@@ -129,6 +134,7 @@ public class StartTimer extends BukkitRunnable {
 						utils.setMetadata(uncolorredPlayers.get(r), "spawnZ", main.getConfig().getDouble("Spawns." + s + ".z"));
 						utils.setMetadata(uncolorredPlayers.get(r), "spawnYaw", main.getConfig().getDouble("Spawns." + s + ".yaw"));
 						utils.setMetadata(uncolorredPlayers.get(r), "lastdamager", "null");
+						main.getTeam(s).addPlayer(uncolorredPlayers.get(r));
 						uncolorredPlayers.remove(r);
 					} else {
 						main.removeBed(s);
@@ -189,10 +195,11 @@ public class StartTimer extends BukkitRunnable {
 					Bukkit.getWorlds().get(0).getBlockAt(main.getConfig().getInt("Beds." + color + ".block1.x"), main.getConfig().getInt("Beds." + color + ".block1.y"), main.getConfig().getInt("Beds." + color + ".block1.z")).setType(Material.AIR);
 					Bukkit.getWorlds().get(0).getBlockAt(main.getConfig().getInt("Beds." + color + ".block2.x"), main.getConfig().getInt("Beds." + color + ".block2.y"), main.getConfig().getInt("Beds." + color + ".block2.z")).setType(Material.AIR);
 				}
+				main.setGamePhase(GamePhase.Start);
 
 				if (main.getConfig().getConfigurationSection("Gen.team") != null) {
 					for (String gen : main.getConfig().getConfigurationSection("Gen.team").getKeys(false)) {
-						main.getGens().add(new TeamGen(main.getConfig().getString("Gen.team." + gen + ".color"), new Location(Bukkit.getWorlds().get(0), main.getConfig().getDouble("Gen.team." + gen + ".x"), main.getConfig().getDouble("Gen.team." + gen + ".y") + 0.5, main.getConfig().getDouble("Gen.team." + gen + ".z")), main));
+						main.getTeamGens().add(new TeamGen(main.getConfig().getString("Gen.team." + gen + ".color"), new Location(Bukkit.getWorlds().get(0), main.getConfig().getDouble("Gen.team." + gen + ".x"), main.getConfig().getDouble("Gen.team." + gen + ".y") + 0.5, main.getConfig().getDouble("Gen.team." + gen + ".z")), main));
 					}
 				} else {
 					for (Player player : Bukkit.getOnlinePlayers()) {
@@ -201,8 +208,18 @@ public class StartTimer extends BukkitRunnable {
 						}
 					}
 				}
+				if (main.getConfig().getConfigurationSection("Gen.diamond") != null) {
+					for (String gen : main.getConfig().getConfigurationSection("Gen.diamond").getKeys(false)) {
+						main.addRegularGen(new RegularGen(RegularGenType.DIAMOND, new Location(Bukkit.getWorlds().get(0), main.getConfig().getDouble("Gen.diamond." + gen + ".x"), main.getConfig().getDouble("Gen.diamond." + gen + ".y") + 3.5, main.getConfig().getDouble("Gen.diamond." + gen + ".z")), main));
+					}
+				}
 
-				main.setGamePhase(GamePhase.Start);
+				if (main.getConfig().getConfigurationSection("Gen.emerald") != null) {
+					for (String gen : main.getConfig().getConfigurationSection("Gen.emerald").getKeys(false)) {
+						main.addRegularGen(new RegularGen(RegularGenType.EMERALD, new Location(Bukkit.getWorlds().get(0), main.getConfig().getDouble("Gen.emerald." + gen + ".x"), main.getConfig().getDouble("Gen.emerald." + gen + ".y") + 3.5, main.getConfig().getDouble("Gen.emerald." + gen + ".z")), main));
+					}
+				}
+
 				main.globalTimer = 0;
 				new BukkitRunnable() {
 					@Override
@@ -215,7 +232,7 @@ public class StartTimer extends BukkitRunnable {
 								main.globalTimer = 0;
 							} else {
 //								CAS D'EGALITE, C'EST ICI QUE CA SE PASSE QUAND LA GAME SE FINIE AVEC PLUS d'1 JOUEUR
-								Bukkit.broadcastMessage(ChatColor.RED+"GAME END");
+								Bukkit.broadcastMessage(ChatColor.RED + "GAME END");
 								this.cancel();
 							}
 						}
@@ -229,7 +246,7 @@ public class StartTimer extends BukkitRunnable {
 					player.setHealth(player.getMaxHealth());
 				}
 
-				FastBlockUpdate fastBlockUpdate = new FastBlockUpdate(main,1);
+				FastBlockUpdate fastBlockUpdate = new FastBlockUpdate(main, 1);
 				for (int x = -12; x <= 12; x++) {
 					for (int y = -5; y <= 4; y++) {
 						for (int z = -12; z <= 12; z++) {

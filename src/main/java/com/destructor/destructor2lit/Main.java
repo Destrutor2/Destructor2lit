@@ -9,10 +9,12 @@ import com.comphenix.protocol.wrappers.EnumWrappers;
 import com.destructor.destructor2lit.commands.bedwarsCommand;
 import com.destructor.destructor2lit.commands.bedwarsCommandTab;
 import com.destructor.destructor2lit.commands.toggleparticulesCommand;
-import com.destructor.destructor2lit.customEntities.EntityTypes;
+import com.destructor.destructor2lit.customEntities.PlayerJoinListener;
 import com.destructor.destructor2lit.enums.GamePhase;
 import com.destructor.destructor2lit.enums.GameState;
 import com.destructor.destructor2lit.events.NpcClickEvent;
+import com.destructor.destructor2lit.gens.RegularGen;
+import com.destructor.destructor2lit.gens.TeamGen;
 import com.destructor.destructor2lit.listeners.NpcClickListener;
 import com.destructor.destructor2lit.listeners.PlayersListeners;
 import com.destructor.destructor2lit.listeners.WorldListeners;
@@ -51,6 +53,9 @@ import java.util.concurrent.ConcurrentMap;
 -message lorsd'un changement de gamephase
 -Tester le plugin en changeant le ping
 -Bruit
+-tab complete pour addnpc et remove npc...
+-probleme build limit se save en txt dans la config lors de /bw setbuildlimit
+-Rayon trap: 11
 
 
 -empecher de consommer des items quand joueur a un inventaire ouvert
@@ -80,56 +85,18 @@ import java.util.concurrent.ConcurrentMap;
 * */
 
 
-/*18:11:39 ERROR]: Could not pass event NpcClickEvent to Destructor2lit vAlpha
-org.bukkit.event.EventException
-	at org.bukkit.plugin.java.JavaPluginLoader$1.execute(JavaPluginLoader.java:310) ~[spigot.jar:git-Spigot-db6de12-18fbb24]
-	at org.bukkit.plugin.RegisteredListener.callEvent(RegisteredListener.java:62) ~[spigot.jar:git-Spigot-db6de12-18fbb24]
-	at org.bukkit.plugin.SimplePluginManager.fireEvent(SimplePluginManager.java:502) [spigot.jar:git-Spigot-db6de12-18fbb24]
-	at org.bukkit.plugin.SimplePluginManager.callEvent(SimplePluginManager.java:487) [spigot.jar:git-Spigot-db6de12-18fbb24]
-	at com.destructor.destructor2lit.Main$1.onPacketReceiving(Main.java:172) [Destructor2lit.jar:?]
-	at com.comphenix.protocol.injector.SortedPacketListenerList.invokeReceivingListener(SortedPacketListenerList.java:114) [ProtocolLib.jar:4.7.0]
-	at com.comphenix.protocol.injector.SortedPacketListenerList.invokePacketRecieving(SortedPacketListenerList.java:67) [ProtocolLib.jar:4.7.0]
-	at com.comphenix.protocol.injector.PacketFilterManager.handlePacket(PacketFilterManager.java:537) [ProtocolLib.jar:4.7.0]
-	at com.comphenix.protocol.injector.PacketFilterManager.invokePacketRecieving(PacketFilterManager.java:509) [ProtocolLib.jar:4.7.0]
-	at com.comphenix.protocol.injector.netty.ProtocolInjector.packetReceived(ProtocolInjector.java:360) [ProtocolLib.jar:4.7.0]
-	at com.comphenix.protocol.injector.netty.ProtocolInjector.onPacketReceiving(ProtocolInjector.java:325) [ProtocolLib.jar:4.7.0]
-	at com.comphenix.protocol.injector.netty.ChannelInjector.decode(ChannelInjector.java:593) [ProtocolLib.jar:4.7.0]
-	at io.netty.handler.codec.ByteToMessageDecoder.callDecode(ByteToMessageDecoder.java:249) [spigot.jar:git-Spigot-db6de12-18fbb24]
-	at io.netty.handler.codec.ByteToMessageDecoder.channelRead(ByteToMessageDecoder.java:149) [spigot.jar:git-Spigot-db6de12-18fbb24]
-	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:333) [spigot.jar:git-Spigot-db6de12-18fbb24]
-	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:319) [spigot.jar:git-Spigot-db6de12-18fbb24]
-	at com.comphenix.protocol.injector.netty.ChannelInjector$2.channelRead(ChannelInjector.java:289) [ProtocolLib.jar:4.7.0]
-	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:333) [spigot.jar:git-Spigot-db6de12-18fbb24]
-	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:319) [spigot.jar:git-Spigot-db6de12-18fbb24]
-	at io.netty.handler.codec.ByteToMessageDecoder.channelRead(ByteToMessageDecoder.java:163) [spigot.jar:git-Spigot-db6de12-18fbb24]
-	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:333) [spigot.jar:git-Spigot-db6de12-18fbb24]
-	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:319) [spigot.jar:git-Spigot-db6de12-18fbb24]
-	at io.netty.handler.timeout.ReadTimeoutHandler.channelRead(ReadTimeoutHandler.java:150) [spigot.jar:git-Spigot-db6de12-18fbb24]
-	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:333) [spigot.jar:git-Spigot-db6de12-18fbb24]
-	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:319) [spigot.jar:git-Spigot-db6de12-18fbb24]
-	at io.netty.channel.DefaultChannelPipeline.fireChannelRead(DefaultChannelPipeline.java:787) [spigot.jar:git-Spigot-db6de12-18fbb24]
-	at io.netty.channel.nio.AbstractNioByteChannel$NioByteUnsafe.read(AbstractNioByteChannel.java:130) [spigot.jar:git-Spigot-db6de12-18fbb24]
-	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:511) [spigot.jar:git-Spigot-db6de12-18fbb24]
-	at io.netty.channel.nio.NioEventLoop.processSelectedKeysPlain(NioEventLoop.java:430) [spigot.jar:git-Spigot-db6de12-18fbb24]
-	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:384) [spigot.jar:git-Spigot-db6de12-18fbb24]
-	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:354) [spigot.jar:git-Spigot-db6de12-18fbb24]
-	at io.netty.util.concurrent.SingleThreadEventExecutor$2.run(SingleThreadEventExecutor.java:116) [spigot.jar:git-Spigot-db6de12-18fbb24]
-	at java.base/java.lang.Thread.run(Thread.java:831) [?:?]
-Caused by: net.minecraft.server.v1_8_R3.CancelledPacketHandleException*/
-
-
-
 public class Main extends JavaPlugin {
 	private final BlockOverride stainedglass = new BlockOverride(Block.getById(95));
 	private final List<Player> players = new ArrayList<>();
-	public StartTimer startTimer = new StartTimer(this, 20);
+	public StartTimer startTimer = new StartTimer(this, 20, false);
 	public List<String> colors = new ArrayList<>();
 	public int buildlimit;
 	private GameState gameState;
 	private GamePhase gamePhase;
 	private Boolean[] beds;
 	private Boolean[] healPools;
-	private final List<TeamGen> gens = new ArrayList<>();
+	private final List<TeamGen> teamGens = new ArrayList<>();
+	private final List<RegularGen> regularGens = new ArrayList<>();
 	public NPCManager npcManager;
 	public Location spawn;
 	public Map<UUID, ItemStack[]> offlinePlayersInventory = new HashMap<>();
@@ -153,6 +120,8 @@ public class Main extends JavaPlugin {
 	private Utils utils = new Utils();
 	public EntityHider entityHider;
 	public int popupTowerSpeedMultiplier;
+	List<BwTeam> teams = new ArrayList<>();
+	public double trapTriggerRadiusSquared;
 
 
 	@Override
@@ -196,6 +165,9 @@ public class Main extends JavaPlugin {
 		npcManager = new NPCManager();
 		protocolManager = ProtocolLibrary.getProtocolManager();
 		Main main = this;
+
+		//		Le spawn
+		spawn = new Location(Bukkit.getWorlds().get(0), getConfig().getDouble("mainspawn.x"), getConfig().getDouble("mainspawn.y"), getConfig().getDouble("mainspawn.z"), 0f, 0f);
 
 //		###############################################################
 //		C'est pas top de l'avoir compresse comme ca mais bon
@@ -251,6 +223,18 @@ public class Main extends JavaPlugin {
 //		On mets toutes les sections de Spawns dans colors
 		colors.addAll(getConfig().getConfigurationSection("Spawns").getKeys(false));
 
+		for (String color : colors) {
+			teams.add(new BwTeam(utils.getTeamColor(color), color, new Location(
+					spawn.getWorld(),
+					getConfig().getDouble("Spawns." + color + ".x"),
+					getConfig().getDouble("Spawns." + color + ".y"),
+					getConfig().getDouble("Spawns." + color + ".z"),
+					(float) getConfig().getDouble("Spawns." + color + ".yaw"),
+					0f),
+					new Location(spawn.getWorld(), getConfig().getInt("Beds." + color + ".block1.x"), getConfig().getInt("Beds." + color + ".block1.y"), getConfig().getInt("Beds." + color + ".block1.z")),
+					new Location(spawn.getWorld(), getConfig().getInt("Beds." + color + ".block2.x"), getConfig().getInt("Beds." + color + ".block2.y"), getConfig().getInt("Beds." + color + ".block2.z"))));
+		}
+
 
 //		On lit les valeurs pour les generateurs dans le fichier config
 		maxGoldDelay = getConfig().getInt("Generators.maxgolddelay");
@@ -290,6 +274,7 @@ public class Main extends JavaPlugin {
 		pm.registerEvents(new PlayersListeners(this), this);
 		pm.registerEvents(new WorldListeners(this), this);
 		pm.registerEvents(new NpcClickListener(this), this);
+		pm.registerEvents(new PlayerJoinListener(this), this);
 
 //        Juste pour être sur, on mets les mondes en pvp false et difficulty easy
 		for (World w : Bukkit.getWorlds()) {
@@ -318,6 +303,7 @@ public class Main extends JavaPlugin {
 		builddownlimit = getConfig().getInt("builddownlimit");
 		voidHeight = getConfig().getInt("voidheight");
 		golemDamageMultiplier = getConfig().getDouble("golemdamagemultiplier");
+		trapTriggerRadiusSquared = Math.pow(getConfig().getDouble("traptriggerradius"), 2);
 
 //        Creation du trait ShopType
 //		CitizensAPI.getTraitFactory().registerTrait(net.citizensnpcs.api.trait.TraitInfo.create(ShopType.class).withName("ShopType"));
@@ -346,8 +332,6 @@ public class Main extends JavaPlugin {
 
 		minBowCharge = (float) getConfig().getDouble("minbowcharge");
 
-//		Le spawn
-		spawn = new Location(Bukkit.getWorlds().get(0), getConfig().getDouble("mainspawn.x"), getConfig().getDouble("mainspawn.y"), getConfig().getDouble("mainspawn.z"), 0f, 0f);
 
 //        MESSAGE D'ACTIVATION
 		getServer().getConsoleSender().sendMessage(ChatColor.RED + getDescription().getName() + " v" + getDescription().getVersion() + ChatColor.GREEN + " activé!");
@@ -361,25 +345,26 @@ public class Main extends JavaPlugin {
 
 		if (protocolManager != null)
 			protocolManager.removePacketListeners(this);
-//		Ca c'est un peu de code vole qui permet de reload sans probleme de protocollib
-		try {
-			Class<AttributeKey> attributeKeyClass = AttributeKey.class;
-			Field namesField = attributeKeyClass.getDeclaredField("names");
-			namesField.setAccessible(true);
-			ConcurrentMap<String, Boolean> names = (ConcurrentMap) namesField.get((Object) null);
-			Iterator var5 = names.keySet().iterator();
 
-			while (var5.hasNext()) {
-				String name = (String) var5.next();
-				if (name.toLowerCase().startsWith("protocol")) {
-					names.remove(name);
-				}
-			}
-		} catch (Exception var6) {
-			var6.printStackTrace();
-		}
+////		Ca c'est un peu de code vole qui permet de reload sans probleme de protocollib
+//		try {
+//			Class<AttributeKey> attributeKeyClass = AttributeKey.class;
+//			Field namesField = attributeKeyClass.getDeclaredField("names");
+//			namesField.setAccessible(true);
+//			ConcurrentMap<String, Boolean> names = (ConcurrentMap) namesField.get((Object) null);
+//			Iterator var5 = names.keySet().iterator();
+//
+//			while (var5.hasNext()) {
+//				String name = (String) var5.next();
+//				if (name.toLowerCase().startsWith("protocol")) {
+//					names.remove(name);
+//				}
+//			}
+//		} catch (Exception var6) {
+//			var6.printStackTrace();
+//		}
 
-		if(npcManager!=null) {
+		if (npcManager != null) {
 			npcManager.removeAllNpcs(this);
 		}
 
@@ -425,18 +410,37 @@ public class Main extends JavaPlugin {
 		this.beds[colors.indexOf(color)] = false;
 	}
 
-	public void StartStartTimer() {
-		startTimer = new StartTimer(this, startTimer.timer);
+	public void StartStartTimer(Boolean force) {
+		startTimer = new StartTimer(this, startTimer.timer, force);
 		startTimer.runTaskTimer(this, 0, 20);
 	}
 
-	public List<TeamGen> getGens() {
-		return gens;
+	public List<TeamGen> getTeamGens() {
+		return teamGens;
 	}
 
 	public List<Player> getHiddenPlayers() {
 		return hiddenPlayers;
 	}
 
+	public List<RegularGen> getRegularGens() {
+		return regularGens;
+	}
+
+	public void addRegularGen(RegularGen regularGen) {
+		regularGens.add(regularGen);
+	}
+
+	public BwTeam getTeam(String color) {
+		for (BwTeam team : teams) {
+			if (team.getColor().equalsIgnoreCase(color))
+				return team;
+		}
+		return null;
+	}
+
+	public List<BwTeam> getTeams() {
+		return teams;
+	}
 
 }
