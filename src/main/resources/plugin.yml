@@ -2,7 +2,7 @@ main: com.destructor.destructor2lit.Main
 name: Destructor2lit
 version: Alpha
 author: Destructor2ku
-description: Plugin Bedwars par Destructor2ku
+description: Bedwars Plugin by Destructor2ku
 prefix: "[Destructor2lit]"
 commands:
   leave:

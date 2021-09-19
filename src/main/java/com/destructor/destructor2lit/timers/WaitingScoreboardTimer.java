@@ -62,7 +62,7 @@ public class WaitingScoreboardTimer extends BukkitRunnable {
 				objective.getScore(ChatColor.WHITE + "Mode: " + ChatColor.GREEN + "Solo"),
 				objective.getScore(ChatColor.WHITE + "Version: " + ChatColor.GRAY + main.getDescription().getVersion()),
 				objective.getScore(" "),
-				objective.getScore(ChatColor.YELLOW + "Eldolfin#0001")
+				objective.getScore(ChatColor.YELLOW + "Eldolfin#8451")
 
 		};
 		for (int i = 0; i < lines.length; i++) {

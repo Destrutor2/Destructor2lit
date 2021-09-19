@@ -1,7 +1,7 @@
 #Fichier de configuration Destructor2lit
 
 #[NON IMPLEMENTÉ] Nombres de parties Bedwars qui peuvent se faire en parralel sur ce même serveur
-instances: 1
+#instances: 1
 
 #Parametres de fireball, et de fireball jump
 Fireballs:
@@ -32,6 +32,8 @@ golemspeedmultiplier: 1.2
 #Limites de build
 buildlimit: 80
 builddownlimit: 60
+#Distance par rapport au Main spawn à laquelle on ne peut plus aller
+arenaborderdistance: 50
 #Temps en milisecondes que le tag du last damager reste
 attacktagstaytime: 30000
 minbowcharge: 0.3
@@ -39,16 +41,21 @@ mainspawn:
   x: 0.5
   y: 120
   z: 0.5
+
+#  Ces valeurs doivent etre mises au carre
 #Rayon d'effet des traps a partir du milieu du lit
-traptriggerradius : 11.0
+traptriggerradius: 121
+#Radius du healpool
+healpoolradius: 400
+spawnprotectionradius: 100
 
 popuptowerspeedmultiplier: 4
 
-Generators:
+TeamGenerators:
 # Ces delays sont en ticks
 # faire en sorte que les delays soient des multiples de 5, 5*1.5 et 5*2 (par rapport aux upgrades)
-  maxgolddelay : 500
   mingolddelay : 60
+  maxgolddelay : 500
   maxirondelay : 40
   tickstotry: 5
 

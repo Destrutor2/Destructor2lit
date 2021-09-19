@@ -264,6 +264,7 @@ public class Upgrades {
 			if (itName.equalsIgnoreCase("Heal Pool")) {
 				if (canBuy(diamonds, player, 1, team, "Heal Pool", team.getHealpool())) {
 					team.setHealpool(true);
+					team.updateEffects();
 				}
 			}
 			if (itName.equalsIgnoreCase("Dragon Buff")) {
@@ -271,7 +272,7 @@ public class Upgrades {
 					team.setDragonbuff(true);
 				}
 			}
-
+			openUI(player,0,main);
 		} else if (inv.getName().equalsIgnoreCase("Queue a trap")) {
 //			La on s'occupe des traps
 			if (e.getSlot() >= 10 && e.getSlot() <= 13) {
@@ -283,8 +284,10 @@ public class Upgrades {
 				}
 
 			}
+			openUI(player,1,main);
 		}
 
+		player.updateInventory();
 	}
 
 	private static Boolean canBuy(int diamonds, Player player, int price, BwTeam team, String purchasedItem, boolean hasAlready) {

@@ -52,7 +52,7 @@ public class GamePhaseTimer extends BukkitRunnable {
 		Score line2 = objective.getScore("   ");
 		Score line4 = objective.getScore("  ");
 		Score line9 = objective.getScore(" ");
-		Score line10 = objective.getScore(ChatColor.YELLOW + "Eldolfin#0001");
+		Score line10 = objective.getScore(ChatColor.YELLOW + "Eldolfin#8451");
 		line2.setScore(13);
 		line4.setScore(11);
 		line9.setScore(2);

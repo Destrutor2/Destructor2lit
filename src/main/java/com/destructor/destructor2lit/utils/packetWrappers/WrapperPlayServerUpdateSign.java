@@ -1,29 +1,31 @@
 package com.destructor.destructor2lit.utils.packetWrappers;
 
+
 import com.comphenix.protocol.PacketType;
-import com.comphenix.protocol.PacketType.Play.Client;
+import com.comphenix.protocol.PacketType.Play.Server;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.wrappers.BlockPosition;
 import com.comphenix.protocol.wrappers.WrappedChatComponent;
 
-public class WrapperPlayClientUpdateSign extends AbstractPacket {
+@SuppressWarnings("deprecation")
+public class WrapperPlayServerUpdateSign extends AbstractPacket {
     public static final PacketType TYPE;
 
     static {
-        TYPE = Client.UPDATE_SIGN;
+        TYPE = Server.UPDATE_SIGN;
     }
 
-    public WrapperPlayClientUpdateSign() {
+    public WrapperPlayServerUpdateSign() {
         super(new PacketContainer(TYPE), TYPE);
         this.handle.getModifier().writeDefaults();
     }
 
-    public WrapperPlayClientUpdateSign(PacketContainer packet) {
+    public WrapperPlayServerUpdateSign(PacketContainer packet) {
         super(packet, TYPE);
     }
 
     public BlockPosition getLocation() {
-        return (BlockPosition)this.handle.getBlockPositionModifier().read(0);
+        return (BlockPosition) this.handle.getBlockPositionModifier().read(0);
     }
 
     public void setLocation(BlockPosition value) {
@@ -31,7 +33,7 @@ public class WrapperPlayClientUpdateSign extends AbstractPacket {
     }
 
     public WrappedChatComponent[] getLines() {
-        return (WrappedChatComponent[])this.handle.getChatComponentArrays().read(0);
+        return (WrappedChatComponent[]) this.handle.getChatComponentArrays().read(0);
     }
 
     public void setLines(WrappedChatComponent[] value) {

@@ -29,7 +29,7 @@ public class bridgeEgg {
 				eggLocations.add(egg.getLocation().clone());
 
 				if (i >= 4) {
-					if (eggLocations.get(i - 2).getY() < main.builddownlimit || eggLocations.get(i - 2).getY() > main.buildlimit) {
+					if (eggLocations.get(i - 2).getY() < main.bwConfig.buildlimit || eggLocations.get(i - 2).getY() > main.bwConfig.builddownlimit) {
 						egg.remove();
 						this.cancel();
 						return;

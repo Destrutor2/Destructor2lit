@@ -36,6 +36,7 @@ public class AngryIronGolem extends EntityIronGolem {
 		List targetC = (List) getPrivateField("c", PathfinderGoalSelector.class, targetSelector);
 		targetC.clear();
 
+
 		this.goalSelector.a(1, new PathfinderGoalMeleeAttack(this, EntityHuman.class, 1.0D, true));
 		this.goalSelector.a(2, new PathfinderGoalMoveTowardsTarget(this, 0.9D, 32.0F));
 		this.goalSelector.a(3, new PathfinderGoalMoveThroughVillage(this, 0.6D, true));

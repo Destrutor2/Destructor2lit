@@ -1,5 +1,6 @@
 package com.destructor.destructor2lit.events;
 
+import com.destructor.destructor2lit.API.BwKillEvent;
 import com.destructor.destructor2lit.enums.BwDeaths;
 import com.destructor.destructor2lit.Main;
 import com.destructor.destructor2lit.timers.DeathTimer;
@@ -287,11 +288,11 @@ public class Die {
 	}*/
 
 	public static void Die(Player player, Main main, BwDeaths deathType) {
-		die(player, main, deathType.getDefaultKillMessage(), deathType.getDefaultDeathMessage());
+		die(player, main, deathType.getDefaultKillMessage(), deathType.getDefaultDeathMessage(), deathType);
 	}
 
 	//	dans les message, utiliser %bwkiller% et %bwplayer%
-	private static void die(Player player, Main main, String killMessage, String dieMessage) {
+	private static void die(Player player, Main main, String killMessage, String dieMessage, BwDeaths deathType) {
 		Utils utils = new Utils();
 		String lastdamager = utils.getMetadata(player, "lastdamager").asString();
 		utils.setMetadata(player, "alive", false);
@@ -303,10 +304,10 @@ public class Die {
 		}
 		String displayedMessage;
 
-		if (!lastdamager.equals("null") && (utils.getMetadata(player, "lastattack").asLong() > (new SystemClock().currentTimeMillis() - main.attackTagMilis))) {
-
+		if (!lastdamager.equals("null") && (utils.getMetadata(player, "lastattack").asLong() > (new SystemClock().currentTimeMillis() - main.bwConfig.attacktagstaytimemillis))) {
 			displayedMessage = killMessage;
 			Player killer = Bukkit.getPlayer(UUID.fromString(lastdamager));
+			Bukkit.getPluginManager().callEvent(new BwKillEvent(killer, player, deathType, !main.hasBed(utils.getMetadata(player, "color").asString())));
 			if (utils.countItem(player, Material.IRON_INGOT) != 0) {
 				killer.getInventory().addItem(new ItemStack(Material.IRON_INGOT, utils.countItem(player, Material.IRON_INGOT)));
 				killer.sendMessage(ChatColor.WHITE + "+" + utils.countItem(player, Material.IRON_INGOT) + " Iron");
@@ -348,7 +349,7 @@ public class Die {
 		player.getInventory().setChestplate(null);
 		player.getInventory().setLeggings(null);
 		player.getInventory().setBoots(null);
-		for(PotionEffect effect:player.getActivePotionEffects()){
+		for (PotionEffect effect : player.getActivePotionEffects()) {
 			player.removePotionEffect(effect.getType());
 		}
 		player.setFireTicks(0);

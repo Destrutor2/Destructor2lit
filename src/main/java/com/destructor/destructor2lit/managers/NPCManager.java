@@ -9,7 +9,6 @@ import com.comphenix.protocol.wrappers.WrappedGameProfile;
 import com.destructor.destructor2lit.Main;
 import com.destructor.destructor2lit.utils.packetWrappers.WrapperPlayServerPlayerInfo;
 import com.mojang.authlib.GameProfile;
-import de.slikey.effectlib.particle.ReflectionHandler;
 import net.minecraft.server.v1_8_R3.*;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;

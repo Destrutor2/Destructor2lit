@@ -1,5 +1,6 @@
 package com.destructor.destructor2lit.timers;
 
+import com.destructor.destructor2lit.BwTeam;
 import com.destructor.destructor2lit.Main;
 import com.destructor.destructor2lit.utils.Title;
 import com.destructor.destructor2lit.utils.Utils;
@@ -13,6 +14,7 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
+import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -102,6 +104,16 @@ public class DeathTimer extends BukkitRunnable {
             unbreakableMeta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
             ItemStack woodSword = new ItemStack(Material.WOOD_SWORD,1);
             woodSword.setItemMeta(unbreakableMeta);
+
+//            On check pour healpool
+            for(BwTeam team:main.getTeams()){
+                if (team.contains(player)) {
+                    if(team.getHealpool()){
+                        player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,Integer.MAX_VALUE,0,true,true),true);
+                    }
+                    break;
+                }
+            }
             switch (utils.getMetadata(player, "armor").asInt()) {
                 case 1:
                     boots = new ItemStack(Material.CHAINMAIL_BOOTS);

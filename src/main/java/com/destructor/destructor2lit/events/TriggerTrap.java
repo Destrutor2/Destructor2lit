@@ -19,7 +19,7 @@ import static org.bukkit.ChatColor.*;
 
 public class TriggerTrap {
 	public TriggerTrap(Player player, BwTeam bwTeam, Main main) {
-		if (!bwTeam.getPlayers().contains(player) && bwTeam.canTrapTrigger() && Utils.getMetadata(player, "lastMilk").asLong() + 30000 < System.currentTimeMillis()) {
+		if (!bwTeam.contains(player) && bwTeam.canTrapTrigger() && Utils.getMetadata(player, "lastMilk").asLong() + 30000 < System.currentTimeMillis()) {
 			byte type = bwTeam.getTraps().remove();
 			bwTeam.logTriggerTrap();
 
